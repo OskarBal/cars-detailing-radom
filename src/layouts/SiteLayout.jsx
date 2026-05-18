@@ -4,12 +4,22 @@ import Navbar from '../components/Navbar.jsx'
 import Footer from '../components/Footer.jsx'
 
 export default function SiteLayout() {
-  const { pathname } = useLocation()
+  const { pathname, hash } = useLocation()
 
-  // Scroll to top on route change (anchors on same page handled by browser)
+  // Scroll on route or hash change. If hash, scroll to the matching id;
+  // otherwise reset to top. Wait one frame so the destination section is mounted.
   useEffect(() => {
-    if (!window.location.hash) window.scrollTo(0, 0)
-  }, [pathname])
+    if (hash) {
+      const id = hash.slice(1)
+      // small timeout lets the route's tree paint before we scroll
+      const t = setTimeout(() => {
+        const el = document.getElementById(id)
+        if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' })
+      }, 60)
+      return () => clearTimeout(t)
+    }
+    window.scrollTo(0, 0)
+  }, [pathname, hash])
 
   return (
     <>

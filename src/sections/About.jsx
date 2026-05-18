@@ -3,7 +3,7 @@ export default function About() {
     <section
       id="o-nas"
       aria-label="O nas"
-      className="relative bg-noir-deep text-noir-bright py-20 md:py-32 px-6 md:px-10"
+      className="relative bg-noir-deep text-noir-bright pt-10 md:pt-16 pb-20 md:pb-32 px-6 md:px-10"
     >
       <div className="mx-auto max-w-[1100px] grid md:grid-cols-[1fr_1.2fr] gap-12 md:gap-16 items-center">
 
@@ -29,7 +29,7 @@ export default function About() {
           <dl className="mt-8 grid grid-cols-3 gap-4 max-w-md">
             <Stat value="100%" label="Pasja" />
             <Stat value="7"    label="Dni w tygodniu" />
-            <Stat value="∞"    label="Cierpliwości" />
+            <Stat value={<InfinityGlyph />} label="Cierpliwości" />
           </dl>
         </div>
 
@@ -53,5 +53,25 @@ function Stat({ value, label }) {
       <dt className="font-impact italic font-black uppercase text-3xl text-noir-bright leading-none">{value}</dt>
       <dd className="mt-1 font-display text-[11px] tracking-[0.14em] uppercase text-noir-faint">{label}</dd>
     </div>
+  )
+}
+
+function InfinityGlyph() {
+  return (
+    <svg
+      viewBox="0 0 40 22"
+      width="44"
+      height="28"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="4"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      role="img"
+      aria-label="∞"
+      style={{ display: 'block' }}
+    >
+      <path d="M6 11 C 6 4, 16 4, 20 11 C 24 18, 34 18, 34 11 C 34 4, 24 4, 20 11 C 16 18, 6 18, 6 11" />
+    </svg>
   )
 }

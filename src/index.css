@@ -38,6 +38,7 @@ html, body {
   -moz-osx-font-smoothing: grayscale;
   text-rendering: optimizeLegibility;
   font-synthesis: none;
+  color-scheme: dark; /* dark-themed native controls — <select> menus, scrollbars, etc. */
 }
 
 body { min-height: 100svh; }
@@ -56,3 +57,210 @@ html { scroll-behavior: smooth; }
 /* Hide scrollbar on tiktok carousels (used later) */
 .no-scrollbar::-webkit-scrollbar { display: none; }
 .no-scrollbar { scrollbar-width: none; }
+
+/* Door-to-door section — travelling dot along the route line */
+@keyframes d2d-travel {
+  0%, 4%  { left: 0%;            opacity: 0; }
+  14%     {                       opacity: 1; }
+  86%     {                       opacity: 1; }
+  96%, 100% { left: 100%;         opacity: 0; }
+}
+.d2d-dot {
+  animation: d2d-travel 3.6s linear infinite;
+}
+@media (prefers-reduced-motion: reduce) {
+  .d2d-dot { animation: none; opacity: 0; }
+}
+
+/* =========================================================
+   Magic CTA — "Szczegółowa wycena · 15 min"
+   Airbrush-spray metaphor: heavily-blurred atmospheric accent-red mist
+   sweeps left-to-right across the button on a 5.5s loop, with a brighter
+   leading-edge "wet" hotspot. Breathing accent halo (box-shadow) ambient
+   underneath. Border + text shift to accent-hi briefly as the cloud
+   crosses the button — the "paint depositing" moment.
+   ========================================================= */
+.cta-magic {
+  position: relative;
+  overflow: hidden;
+  isolation: isolate;
+  animation:
+    cta-magic-glow 3.2s ease-in-out infinite,
+    cta-magic-deposit 5.5s ease-in-out infinite;
+}
+
+/* Spray cloud — multi-stop radial gradients give organic, asymmetric
+   atmospheric depth (a brighter leading hotspot + main body + trailing
+   haze). Heavy blur converts hard gradient edges into soft mist. */
+.cta-magic::before {
+  content: '';
+  position: absolute;
+  inset: -120% -25%;
+  background:
+    radial-gradient(ellipse 14% 32% at 14% 50%,
+      rgba(255, 130, 118, 0.55) 0%,
+      rgba(255, 110, 100, 0.35) 25%,
+      transparent 55%),
+    radial-gradient(ellipse 26% 55% at 28% 50%,
+      rgba(232, 70, 60, 0.62) 0%,
+      rgba(208, 45, 36, 0.40) 30%,
+      rgba(180, 33, 25, 0.18) 55%,
+      transparent 72%),
+    radial-gradient(ellipse 22% 70% at 52% 52%,
+      rgba(208, 45, 36, 0.35) 0%,
+      rgba(140, 25, 18, 0.15) 40%,
+      transparent 68%),
+    radial-gradient(ellipse 18% 50% at 72% 48%,
+      rgba(160, 28, 22, 0.20) 0%,
+      transparent 62%);
+  filter: blur(14px);
+  transform: translate3d(-105%, 0, 0);
+  opacity: 0;
+  pointer-events: none;
+  z-index: 0;
+  will-change: transform, opacity;
+  animation: cta-magic-spray 5.5s cubic-bezier(0.42, 0.05, 0.4, 1) infinite;
+}
+
+/* Subtle inner brightening that fires in sync with the spray pass —
+   border + text briefly shift to accent-hi like the airbrush deposit
+   is "energizing" the surface. Tuned to peak when the cloud is mid-button. */
+@keyframes cta-magic-deposit {
+  0%, 22%   { color: var(--color-accent, #b82119); border-color: var(--color-accent, #b82119); }
+  35%, 65%  { color: var(--color-accent-hi, #d02d24); border-color: var(--color-accent-hi, #d02d24); }
+  85%, 100% { color: var(--color-accent, #b82119); border-color: var(--color-accent, #b82119); }
+}
+
+@keyframes cta-magic-spray {
+  0%   { transform: translate3d(-105%, 0, 0)  scaleY(0.85); opacity: 0; }
+  12%  { opacity: 0; }
+  22%  { transform: translate3d(-65%, -3px, 0) scaleY(1);     opacity: 0.85; }
+  45%  { transform: translate3d(-10%,  2px, 0) scaleY(1.05);  opacity: 1; }
+  62%  { transform: translate3d(35%,  -1px, 0) scaleY(1);     opacity: 1; }
+  82%  { transform: translate3d(85%,   2px, 0) scaleY(0.95);  opacity: 0.55; }
+  100% { transform: translate3d(135%,  0, 0)   scaleY(0.85);  opacity: 0; }
+}
+
+@keyframes cta-magic-glow {
+  0%, 100% {
+    box-shadow:
+      0 0 0 1px rgba(184, 33, 25, 0.40),
+      0 0 14px rgba(184, 33, 25, 0.22);
+  }
+  50% {
+    box-shadow:
+      0 0 0 2px rgba(208, 45, 36, 0.80),
+      0 0 32px rgba(208, 45, 36, 0.55);
+  }
+}
+
+/* Hover — fires the airbrush twice as fast (the trigger pulled harder) */
+.cta-magic:hover {
+  animation-duration: 1.6s, 2.4s;
+}
+.cta-magic:hover::before {
+  animation-duration: 2.4s;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .cta-magic,
+  .cta-magic::before {
+    animation: none;
+  }
+  .cta-magic::before { opacity: 0; }
+}
+
+/* =========================================================
+   Pakiet miesiąca — live pulse dot on the eyebrow.
+   Sole motion signal in the section: "this is fresh, this month."
+   ========================================================= */
+.promo-dot {
+  animation: promo-dot-pulse 4s ease-in-out infinite;
+  box-shadow: 0 0 0 0 rgba(208, 45, 36, 0.6);
+}
+
+@keyframes promo-dot-pulse {
+  0%, 100% { opacity: 0.7; transform: scale(1);    box-shadow: 0 0 0 0   rgba(208, 45, 36, 0.55); }
+  50%      { opacity: 1;   transform: scale(1.25); box-shadow: 0 0 0 5px rgba(208, 45, 36, 0);    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .promo-dot { animation: none; }
+}
+
+/* =========================================================
+   Glitch title — used by Pakiet miesiąca H2.
+   Two ghost layers (::before accent-hi, ::after translucent white)
+   read the same text via attr(data-text), offset in opposite
+   directions and clip-path-sliced into horizontal bands. Glitch
+   fires for ~480ms every 3s, otherwise text is clean.
+   Colors stay on-brand: accent-hi + translucent white (no cyan/RGB).
+   ========================================================= */
+.glitch-title {
+  position: relative;
+  display: inline-block;
+  animation: glitch-shift-main 3s infinite steps(1);
+}
+
+.glitch-title::before,
+.glitch-title::after {
+  content: attr(data-text);
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  user-select: none;
+  opacity: 0;
+}
+
+.glitch-title::before {
+  color: var(--color-accent-hi);
+  animation: glitch-shift-r 3s infinite steps(1);
+}
+
+.glitch-title::after {
+  color: rgba(246, 246, 247, 0.55);
+  animation: glitch-shift-c 3s infinite steps(1);
+}
+
+/* Main text — subtle position stutter during glitch window */
+@keyframes glitch-shift-main {
+  0%, 82%, 100% { transform: translate(0); }
+  83%          { transform: translate(1px, 0); }
+  86%          { transform: translate(-1px, 0); }
+  89%          { transform: translate(2px, 0); }
+  92%          { transform: translate(-1px, 1px); }
+  95%          { transform: translate(1px, 0); }
+}
+
+/* Red ghost — offsets RIGHT, slices upper/lower bands */
+@keyframes glitch-shift-r {
+  0%, 82%, 100% { opacity: 0; transform: translate(0); clip-path: inset(0 0 100% 0); }
+  83%          { opacity: 0.85; transform: translate(3px, 0);   clip-path: inset(15% 0 60% 0); }
+  86%          { opacity: 0.80; transform: translate(-2px, 0);  clip-path: inset(55% 0 18% 0); }
+  89%          { opacity: 0.70; transform: translate(2px, 1px); clip-path: inset(28% 0 42% 0); }
+  92%          { opacity: 0.75; transform: translate(-1px, -1px); clip-path: inset(68% 0 5% 0); }
+  95%          { opacity: 0.60; transform: translate(2px, 0);   clip-path: inset(8% 0 72% 0); }
+  98%          { opacity: 0; }
+}
+
+/* White ghost — offsets LEFT, complementary slices */
+@keyframes glitch-shift-c {
+  0%, 82%, 100% { opacity: 0; transform: translate(0); clip-path: inset(0 0 100% 0); }
+  83%          { opacity: 0.70; transform: translate(-3px, 0);  clip-path: inset(0 0 72% 0); }
+  86%          { opacity: 0.80; transform: translate(2px, -1px); clip-path: inset(42% 0 25% 0); }
+  89%          { opacity: 0.60; transform: translate(-2px, 1px); clip-path: inset(62% 0 8% 0); }
+  92%          { opacity: 0.70; transform: translate(1px, 1px);  clip-path: inset(22% 0 55% 0); }
+  95%          { opacity: 0.50; transform: translate(-1px, 0);  clip-path: inset(78% 0 0 0); }
+  98%          { opacity: 0; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .glitch-title,
+  .glitch-title::before,
+  .glitch-title::after { animation: none; }
+  .glitch-title::before,
+  .glitch-title::after { opacity: 0; }
+}

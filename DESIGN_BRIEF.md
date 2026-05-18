@@ -63,13 +63,15 @@ Saira Condensed was tried and **rejected** (Google Fonts ships no italic for it 
 ## Site map
 
 ```
-/                  ← scroll page: Hero → About → Services → Realizacje → Kontakt
-/cennik            ← (port pending) full configurator + quote form
+/                  ← scroll page: Hero → TrustStrip → About → Services → Realizacje → Kontakt
+/cennik            ← full configurator + Wycena 15 min modal
 /regulamin         ← legal (later, Markdown render or static)
 ```
 
 Section IDs (anchor targets for nav):
-- `#hero`, `#o-nas`, `#uslugi`, `#realizacje`, `#kontakt`
+- Home: `#hero`, `#o-nas`, `#uslugi`, `#realizacje`, `#kontakt`
+- Cennik categories: `#powloki-ochronne`, `#folie-ppf`, `#korekta-lakieru`, `#detailing-wnetrza`, `#pranie-tapicerki`, `#mycie-zewnetrzne`, `#uslugi-dodatkowe`, `#logistyka` (each section uses `id="cat-<slug>"` internally; the page's hash handler routes both forms)
+- Special: `#wycena` on `/cennik` auto-opens the quote form modal
 
 ## Components
 
@@ -80,19 +82,22 @@ Section IDs (anchor targets for nav):
 | `components/Footer.jsx`              | 3-column footer + © strip                     |
 | `sections/Hero.jsx`                  | BG + headline + lead + CTAs + 4 glass features |
 | `sections/About.jsx`                 | Story copy + stat strip + studio shot         |
-| `sections/Services.jsx`              | 6-tile services grid → cennik CTA             |
+| `sections/Services.jsx`              | 8 services as typography-led ledger; rows deep-link to `/cennik#<category-slug>` |
 | `sections/Realizacje.jsx`            | 4 lazy-hydrated TikTok phone-frame iframes    |
 | `sections/Kontakt.jsx`               | Lead form + tel + address (UI-only v1)        |
 | `pages/Home.jsx`                     | Composes the 5 home sections                  |
-| `pages/Cennik.jsx`                   | Placeholder until configurator port           |
+| `pages/Cennik.jsx`                   | Full 8-category configurator + sticky bar + final CTA; renders `WycenaForm` modal |
 | `pages/NotFound.jsx`                 | 404                                            |
+| `components/WycenaForm.jsx`          | Quote-request modal — services summary, contact fields, RODO, POSTs `/api/wycena` |
 | `lib/nav.js`                         | Single source for NAV_ITEMS + BRAND constants  |
+| `lib/catalog.js`                     | Canonical 8-category / 41-service catalog + `formatZl`; single source for cennik + form |
+| `api/wycena.js`                      | Vercel serverless function — validates payload, sends owner + customer emails via Resend |
 
 ## Hero pattern (locked)
 
 - Eyebrow: `Detailing & Car Care` (accent red, tracked uppercase)
-- H1 line 1: `PERFEKCJA` (Barlow Condensed Black Italic, chrome silver gradient via `background-clip: text`)
-- H1 line 2: `W KAŻDYM DETALU` (same font, deep red gradient)
+- H1 line 1: `TWOJE AUTO.` (Barlow Condensed Black Italic, chrome silver gradient via `background-clip: text`)
+- H1 line 2: `NASZA PASJA.` (same font, deep red gradient)
 - Lead: 2 short lines, muted on desktop, bright + shadow on mobile
 - CTAs differ by viewport:
   - **Desktop:** `Zobacz usługi` (primary → /cennik) + `Nasze realizacje` (ghost → #realizacje)
@@ -114,11 +119,12 @@ Lazy-hydrated via IntersectionObserver on section entry — saves LCP and data.
 - ❌ Stock photos — only Tomasz's own work or AI-generated noir-aesthetic placeholders
 - ❌ Slogan stacking, emoji-laden microcopy, multiple exclamation marks
 
-## Backend (deferred to post-launch / Meeting #2 confirms scope)
+## Backend
 
-- Contact form (`/kontakt`) → Vercel Serverless `/api/lead` → Resend send → `tomasz@...` (email TBD)
-- Cennik wycena form → Vercel Serverless `/api/wycena` → Resend + optional Supabase Storage for uploaded car photos
-- RODO: 12px disclaimer under submit button, no checkbox in v1 (informational consent on submit). Revisit if needed.
+- **Cennik wycena form (live):** `/cennik` → POST `/api/wycena` (Vercel serverless) → Resend SDK ^3 → owner notification email (with photo attachments) + optional customer confirmation. Required env vars: `RESEND_API_KEY`, `WYCENA_TO_EMAIL`, `WYCENA_FROM_EMAIL`, optional `WYCENA_REPLY_TO`. See `.env.example`. **Never** use `onboarding@resend.dev` as `from:` — the function blocks that explicitly.
+- **Photo upload (live):** 10-slot grid on the wycena form. Files compressed client-side via `<canvas>` to ≤1400 px longest edge / JPEG quality 0.78 (typical ~150-300 KB each). HEIC/HEIF rejected with a Polish hint to export as JPG. Drag-drop + click-to-add + keyboard. Photos travel as base64 in the POST body and arrive as Resend email attachments — owner sees them inline in the inbox. Server enforces a per-photo size cap (1.5 MB decoded) on top of the client cap. `api/wycena.js` sets `bodyParser.sizeLimit: '6mb'` so 10×~250 KB base64 fits comfortably under Vercel's limit. **Supabase Storage path** (signed URLs) is the long-term option when uploads exceed 10 / volume picks up — defer until needed.
+- **Home Kontakt section (deferred):** still UI-only `setTimeout` placeholder. Will wire up to `/api/lead` or reuse `/api/wycena` after Meeting #2.
+- **RODO:** 12px disclaimer under submit button, no checkbox in v1 (informational consent on submit). Revisit if needed.
 
 ## Open inputs (collect at Meeting #2)
 

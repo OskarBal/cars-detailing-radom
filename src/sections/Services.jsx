@@ -2,34 +2,54 @@ import { Link } from 'react-router-dom'
 
 const SERVICES = [
   {
+    num: '01',
     title: 'Powłoki ceramiczne',
-    body: 'Trwała ochrona lakieru, efekt głębi i hydrofobowość na lata.',
-    icon: 'sparkle',
+    body: 'Trwała ochrona lakieru, efekt głębi i&nbsp;hydrofobowość na&nbsp;lata.',
+    price: 'OD 1 600 ZŁ',
+    href: '/cennik#powloki-ochronne',
   },
   {
+    num: '02',
     title: 'PPF — folia ochronna',
-    body: 'Niewidoczna powłoka chroniąca lakier przed kamieniami i otarciami.',
-    icon: 'shield',
+    body: 'Niewidoczna powłoka chroniąca lakier przed kamieniami i&nbsp;otarciami.',
+    price: 'OD 4 500 ZŁ',
+    href: '/cennik#folie-ppf',
   },
   {
+    num: '03',
     title: 'Korekta lakieru',
-    body: 'Usunięcie rys, hologramów, śladów po myjniach automatycznych.',
-    icon: 'polish',
+    body: 'Usunięcie rys, hologramów i&nbsp;śladów po myjniach automatycznych.',
+    price: 'OD 800 ZŁ',
+    href: '/cennik#korekta-lakieru',
   },
   {
+    num: '04',
+    title: 'Detailing wnętrza',
+    body: 'Kompleksowe odświeżenie wnętrza — plastiki, szyby, podsufitka, dressing.',
+    price: 'OD 250 ZŁ',
+    href: '/cennik#detailing-wnetrza',
+  },
+  {
+    num: '05',
     title: 'Pranie tapicerki',
-    body: 'Wnętrze jak nowe — siedzenia, sufit, wykładziny, plamy i zapachy.',
-    icon: 'seat',
+    body: 'Wnętrze jak nowe — siedzenia, sufit, wykładziny, plamy i&nbsp;zapachy.',
+    price: 'OD 400 ZŁ',
+    href: '/cennik#pranie-tapicerki',
   },
   {
+    num: '06',
+    title: 'Pakiety',
+    body: '3 gotowe pakiety, największa wartość za&nbsp;cenę.',
+    price: 'OD 250 ZŁ',
+    href: '/cennik#detailing-wnetrza',
+    featured: true,
+  },
+  {
+    num: '07',
     title: 'Door-to-door',
     body: 'Odbieramy i&nbsp;odwozimy auto pod wskazany adres w&nbsp;Radomiu.',
-    icon: 'truck',
-  },
-  {
-    title: 'Mobilny serwis',
-    body: 'Przyjedziemy do&nbsp;Ciebie i&nbsp;wykonamy usługę na&nbsp;miejscu.',
-    icon: 'pin',
+    price: 'Wycena indyw.',
+    href: '/cennik#logistyka',
   },
 ]
 
@@ -54,20 +74,70 @@ export default function Services() {
           </p>
         </header>
 
-        <ul className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
+        <ol className="border-t border-hairline">
           {SERVICES.map((s) => (
-            <li
-              key={s.title}
-              className="group relative p-6 md:p-7 rounded-2xl border border-hairline bg-noir-elevated transition-all duration-400 hover:border-accent/40 hover:-translate-y-0.5"
-            >
-              <div className="text-accent mb-5">
-                <ServiceIcon name={s.icon} />
-              </div>
-              <h3 className="font-display font-bold text-base md:text-lg mb-2 text-noir-bright">{s.title}</h3>
-              <p className="text-sm md:text-[15px] text-noir-muted leading-relaxed" dangerouslySetInnerHTML={{ __html: s.body }} />
+            <li key={s.num} className="border-b border-hairline">
+              <Link
+                to={s.href}
+                className={`group block py-6 md:py-9 transition-colors duration-300 ${
+                  s.featured
+                    ? 'bg-accent/[0.05] hover:bg-accent/[0.10]'
+                    : 'hover:bg-noir-elevated/30'
+                }`}
+              >
+                <div className="flex items-baseline gap-4 md:gap-8">
+                  <span
+                    className={`shrink-0 w-12 md:w-24 font-impact italic font-black transition-colors duration-300 leading-none tabular-nums ${
+                      s.featured
+                        ? 'text-accent'
+                        : 'text-noir-faint group-hover:text-accent'
+                    }`}
+                    style={{ fontSize: 'clamp(2.4rem, 6vw, 4.25rem)' }}
+                  >
+                    {s.num}
+                  </span>
+
+                  <div className="flex-1 min-w-0">
+                    <div className="flex items-baseline justify-between gap-3 md:gap-8">
+                      <h3
+                        className={`font-impact italic font-black uppercase transition-colors duration-300 leading-[1.04] min-w-0 ${
+                          s.featured
+                            ? 'text-accent group-hover:text-accent-hi'
+                            : 'text-noir-bright group-hover:text-accent-hi'
+                        }`}
+                        style={{ fontSize: 'clamp(1.3rem, 3.6vw, 2.5rem)' }}
+                      >
+                        {s.title}
+                      </h3>
+                      <div className="flex items-center gap-2 md:gap-4 shrink-0">
+                        <span
+                          className={`font-display font-bold text-[10px] md:text-[11.5px] tracking-[0.14em] uppercase px-2.5 py-1.5 border rounded whitespace-nowrap transition-colors duration-300 ${
+                            s.featured
+                              ? 'text-accent border-accent group-hover:text-accent-hi group-hover:border-accent-hi'
+                              : 'text-noir-bright border-hairline group-hover:border-accent group-hover:text-accent'
+                          }`}
+                        >
+                          {s.price}
+                        </span>
+                        <span className="text-accent transition-transform duration-400 group-hover:translate-x-1.5 shrink-0">
+                          <svg viewBox="0 0 16 16" width="18" height="18" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
+                            <path d="M3 8h10M9 4l4 4-4 4" />
+                          </svg>
+                        </span>
+                      </div>
+                    </div>
+                    <p
+                      className={`mt-2 md:mt-3 text-[13.5px] md:text-[15px] leading-relaxed max-w-[60ch] transition-colors duration-300 ${
+                        s.featured ? 'text-accent group-hover:text-accent-hi' : 'text-noir-muted'
+                      }`}
+                      dangerouslySetInnerHTML={{ __html: s.body }}
+                    />
+                  </div>
+                </div>
+              </Link>
             </li>
           ))}
-        </ul>
+        </ol>
 
         <div className="mt-12 md:mt-14 flex flex-wrap items-center gap-4">
           <Link
@@ -84,54 +154,4 @@ export default function Services() {
       </div>
     </section>
   )
-}
-
-function ServiceIcon({ name }) {
-  const common = {
-    width: 36, height: 36, viewBox: '0 0 32 32',
-    fill: 'none', stroke: 'currentColor', strokeWidth: 1.4,
-    strokeLinecap: 'round', strokeLinejoin: 'round', 'aria-hidden': true,
-  }
-  switch (name) {
-    case 'sparkle': return (
-      <svg {...common}>
-        <path d="M16 4l2.5 7L26 13l-7.5 2L16 22l-2.5-7L6 13l7.5-2z" />
-        <path d="M24 22l1 3 3 1-3 1-1 3-1-3-3-1 3-1z" />
-      </svg>
-    )
-    case 'shield': return (
-      <svg {...common}>
-        <path d="M16 3l11 4v8c0 7-5 12-11 14-6-2-11-7-11-14V7z" />
-      </svg>
-    )
-    case 'polish': return (
-      <svg {...common}>
-        <circle cx="16" cy="16" r="11" />
-        <circle cx="16" cy="16" r="5" />
-        <path d="M16 5v3M16 24v3M5 16h3M24 16h3" />
-      </svg>
-    )
-    case 'seat': return (
-      <svg {...common}>
-        <path d="M8 4h6a4 4 0 0 1 4 4v8H8z" />
-        <path d="M8 16h14v5a2 2 0 0 1-2 2H10a2 2 0 0 1-2-2z" />
-        <path d="M11 23v4M19 23v4" />
-      </svg>
-    )
-    case 'truck': return (
-      <svg {...common}>
-        <path d="M3 8h13v12H3z" />
-        <path d="M16 12h6l4 4v4h-10z" />
-        <circle cx="8" cy="22" r="2" />
-        <circle cx="22" cy="22" r="2" />
-      </svg>
-    )
-    case 'pin': return (
-      <svg {...common}>
-        <path d="M16 3a9 9 0 0 1 9 9c0 7-9 17-9 17S7 19 7 12a9 9 0 0 1 9-9z" />
-        <circle cx="16" cy="12" r="3" />
-      </svg>
-    )
-    default: return null
-  }
 }
