@@ -1,0 +1,180 @@
+import { useState, useEffect } from 'react'
+import { Link, useLocation } from 'react-router-dom'
+import { NAV_ITEMS, BRAND } from '../lib/nav.js'
+
+export default function Navbar() {
+  const [scrolled, setScrolled] = useState(false)
+  const [open, setOpen] = useState(false)
+  const { pathname, hash } = useLocation()
+
+  useEffect(() => {
+    const onScroll = () => setScrolled(window.scrollY > 24)
+    onScroll()
+    window.addEventListener('scroll', onScroll, { passive: true })
+    return () => window.removeEventListener('scroll', onScroll)
+  }, [])
+
+  // Lock body scroll while mobile drawer open
+  useEffect(() => {
+    document.documentElement.style.overflow = open ? 'hidden' : ''
+    return () => { document.documentElement.style.overflow = '' }
+  }, [open])
+
+  // Close drawer on route/hash change
+  useEffect(() => { setOpen(false) }, [pathname, hash])
+
+  // Close on Escape
+  useEffect(() => {
+    const onKey = (e) => { if (e.key === 'Escape') setOpen(false) }
+    window.addEventListener('keydown', onKey)
+    return () => window.removeEventListener('keydown', onKey)
+  }, [])
+
+  const isHome = pathname === '/'
+
+  return (
+    <header
+      className={[
+        'fixed top-0 inset-x-0 z-40 transition-colors duration-300',
+        scrolled ? 'bg-noir-deep/85 backdrop-blur-md border-b border-hairline' : 'bg-transparent',
+      ].join(' ')}
+    >
+      <div className="mx-auto max-w-[1600px] flex items-center justify-between gap-6 px-6 md:px-10 py-4 md:py-5">
+        {/* Brand */}
+        <Link to="/" className="flex items-center shrink-0" aria-label={`${BRAND.name} — strona główna`}>
+          <img
+            src="/logo.webp"
+            alt={BRAND.name}
+            width={160} height={100}
+            className="h-11 md:h-14 w-auto object-contain mix-blend-screen"
+          />
+        </Link>
+
+        {/* Desktop menu */}
+        <nav className="hidden lg:flex items-center gap-9" aria-label="Główna nawigacja">
+          {NAV_ITEMS.map((item) => (
+            <NavItem key={item.label} item={item} isHome={isHome} />
+          ))}
+        </nav>
+
+        {/* Desktop CTA */}
+        <Link
+          to="/cennik#wycena"
+          className="hidden lg:inline-flex items-center px-5 py-3 border border-accent text-accent text-[12px] font-bold tracking-[0.16em] uppercase rounded-sm transition-colors duration-300 hover:bg-accent hover:text-noir-deep"
+        >
+          Umów wizytę
+        </Link>
+
+        {/* Hamburger (mobile) */}
+        <button
+          type="button"
+          className="lg:hidden relative w-10 h-8 z-[55]"
+          aria-label={open ? 'Zamknij menu' : 'Otwórz menu'}
+          aria-expanded={open}
+          onClick={() => setOpen((v) => !v)}
+        >
+          <span
+            className={[
+              'absolute left-1 right-1 h-[1.5px] bg-noir-bright rounded transition-all duration-300',
+              open ? 'top-1/2 -translate-y-1/2 rotate-45' : 'top-2.5',
+            ].join(' ')}
+          />
+          <span
+            className={[
+              'absolute left-1 right-1 h-[1.5px] bg-noir-bright rounded transition-all duration-300',
+              open ? 'bottom-1/2 translate-y-1/2 -rotate-45' : 'bottom-2.5',
+            ].join(' ')}
+          />
+        </button>
+      </div>
+
+      {/* Mobile drawer */}
+      <div
+        id="nav-drawer"
+        role="dialog"
+        aria-modal="true"
+        aria-label="Menu"
+        className={[
+          'lg:hidden fixed inset-0 z-50 bg-noir-deep/95 backdrop-blur-2xl',
+          'flex flex-col items-center justify-center gap-7 px-6',
+          'transition-opacity duration-400',
+          open ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none',
+        ].join(' ')}
+      >
+        <nav className="flex flex-col items-center gap-5" aria-label="Główna nawigacja (mobile)">
+          {NAV_ITEMS.map((item, i) => (
+            <DrawerLink key={item.label} item={item} index={i} open={open} isHome={isHome} />
+          ))}
+        </nav>
+        <Link
+          to="/cennik#wycena"
+          className={[
+            'px-7 py-3.5 border border-accent text-accent text-[13px] font-bold tracking-[0.16em] uppercase rounded-sm',
+            'transition-all duration-400 hover:bg-accent hover:text-noir-deep',
+            open ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-3',
+          ].join(' ')}
+          style={{ transitionDelay: open ? `${NAV_ITEMS.length * 60 + 60}ms` : '0ms' }}
+        >
+          Umów wizytę
+        </Link>
+        <a
+          href={BRAND.phoneHref}
+          className={[
+            'font-mono text-sm text-noir-muted tracking-wider hover:text-accent transition-colors',
+            open ? 'opacity-100' : 'opacity-0',
+          ].join(' ')}
+          style={{ transitionDelay: open ? `${NAV_ITEMS.length * 60 + 140}ms` : '0ms' }}
+        >
+          {BRAND.phone}
+        </a>
+      </div>
+    </header>
+  )
+}
+
+function NavItem({ item, isHome }) {
+  const active = isActive(item, isHome)
+  const target = item.hash && isHome ? item.hash : item.to + (item.hash || '')
+  return (
+    <a
+      href={target}
+      className={[
+        'relative font-display font-semibold text-[13px] tracking-[0.14em] uppercase pb-2 transition-colors duration-300',
+        active ? 'text-accent' : 'text-noir-bright hover:text-accent',
+      ].join(' ')}
+    >
+      {item.label}
+      <span
+        className={[
+          'absolute left-0 right-0 bottom-0 h-[2px] bg-accent origin-center transition-transform duration-400',
+          active ? 'scale-x-100' : 'scale-x-0',
+        ].join(' ')}
+        aria-hidden="true"
+      />
+    </a>
+  )
+}
+
+function DrawerLink({ item, index, open, isHome }) {
+  const active = isActive(item, isHome)
+  const target = item.hash && isHome ? item.hash : item.to + (item.hash || '')
+  return (
+    <a
+      href={target}
+      className={[
+        'font-display font-bold text-xl tracking-[0.12em] uppercase transition-all duration-400',
+        active ? 'text-accent' : 'text-noir-bright hover:text-accent',
+        open ? 'opacity-100 translate-y-0 scale-100' : 'opacity-0 translate-y-3 scale-95',
+      ].join(' ')}
+      style={{ transitionDelay: open ? `${index * 60 + 80}ms` : '0ms' }}
+    >
+      {item.label}
+    </a>
+  )
+}
+
+function isActive(item, isHome) {
+  if (item.to === '/cennik') return window.location.pathname.startsWith('/cennik')
+  if (item.hash === '#hero' && isHome) return !window.location.hash || window.location.hash === '#hero'
+  return false
+}

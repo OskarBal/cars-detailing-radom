@@ -1,0 +1,58 @@
+@import "tailwindcss";
+
+/* =========================================================
+   Design tokens — Cars Detailing Radom (noir / red accent)
+   See DESIGN_BRIEF.md for the source of truth.
+   ========================================================= */
+@theme {
+  /* Palette */
+  --color-noir-deep:     #08090A;
+  --color-noir-surface:  #111214;
+  --color-noir-elevated: #1A1B1E;
+  --color-noir-bright:   #F6F6F7;
+  --color-noir-muted:    rgba(246, 246, 247, 0.72);
+  --color-noir-faint:    rgba(246, 246, 247, 0.45);
+  --color-hairline:      rgba(246, 246, 247, 0.10);
+  --color-hairline-hi:   rgba(246, 246, 247, 0.20);
+
+  --color-accent:        #B82119;
+  --color-accent-hi:     #D02D24;
+  --color-accent-deep:   #6E120D;
+
+  /* Typography */
+  --font-display: 'Plus Jakarta Sans', system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --font-impact:  'Barlow Condensed', 'Oswald', 'Bebas Neue', 'Arial Narrow', sans-serif;
+  --font-mono:    'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, monospace;
+
+  /* Motion */
+  --ease-apple:    cubic-bezier(0.32, 0.72, 0, 1);
+  --ease-out-back: cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+/* Global reset on top of Tailwind preflight */
+html, body {
+  background: var(--color-noir-deep);
+  color: var(--color-noir-bright);
+  font-family: var(--font-display);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+  font-synthesis: none;
+}
+
+body { min-height: 100svh; }
+
+::selection {
+  background: var(--color-accent);
+  color: var(--color-noir-bright);
+}
+
+/* Smooth scroll for anchor nav */
+html { scroll-behavior: smooth; }
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+}
+
+/* Hide scrollbar on tiktok carousels (used later) */
+.no-scrollbar::-webkit-scrollbar { display: none; }
+.no-scrollbar { scrollbar-width: none; }
