@@ -10,4 +10,9 @@ export default defineConfig({
       '@': fileURLToPath(new URL('./src', import.meta.url)),
     },
   },
+  server: {
+    port: 5180,        // 5173 reserved for the Balagency CRM
+    strictPort: true,  // fail fast if 5180 is busy (don't silently bump to 5181)
+    host: true,        // listen on 0.0.0.0 so the iPhone can reach it over LAN
+  },
 })
