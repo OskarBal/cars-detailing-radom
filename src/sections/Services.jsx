@@ -13,7 +13,7 @@ const SERVICES = [
     title: 'PPF — folia ochronna',
     body: 'Niewidoczna powłoka chroniąca lakier przed kamieniami i&nbsp;otarciami.',
     price: 'OD 4 500 ZŁ',
-    href: '/cennik#folie-ppf',
+    href: '/ppf',
   },
   {
     num: '03',

@@ -84,6 +84,16 @@ function buildAttachments(photos) {
   return out
 }
 
+// Human label for a PPF preset id ("pkg-cale-auto" → "PPF całe auto"). Keeps the
+// owner-email subject readable without importing the data file (api/ runs on
+// Node, the data lives in src/ — duplicate is cheaper than a build-time alias).
+const PPF_PKG_LABELS = {
+  'pkg-reflektory': 'PPF reflektory',
+  'pkg-progi':      'Zabezpieczenie progów PPF',
+  'pkg-front':      'PPF pakiet front',
+  'pkg-cale-auto':  'PPF całe auto',
+}
+
 function buildOwnerHtml(payload) {
   const {
     name,
@@ -97,7 +107,12 @@ function buildOwnerHtml(payload) {
     hasQuoteOnRequest = false,
     submittedAt,
     photosCount = 0,
+    mode = 'cennik',
+    ppfPackageId = null,
   } = payload
+
+  const isPpf = mode === 'ppf'
+  const pkgLabel = ppfPackageId ? PPF_PKG_LABELS[ppfPackageId] || null : null
 
   const rows = selectedDetails
     .map((s) => {
@@ -111,19 +126,28 @@ function buildOwnerHtml(payload) {
     })
     .join('')
 
+  const subtotalLabel = isPpf ? 'Suma od' : 'Suma od'
   const subtotalLine =
     selectedDetails.length > 0
       ? `<tr>
-          <td style="padding:10px 12px;color:#f6f6f7;font-weight:700">Suma od</td>
+          <td style="padding:10px 12px;color:#f6f6f7;font-weight:700">${subtotalLabel}</td>
           <td style="padding:10px 12px;color:#B82119;font-weight:700;text-align:right;white-space:nowrap">od ${formatZlServer(subtotal)}${hasQuoteOnRequest ? ' +' : ''}</td>
         </tr>`
       : ''
 
+  const eyebrowLabel = isPpf ? 'Cars Detailing Radom · PPF' : 'Cars Detailing Radom · Wycena'
+  const h1Label = isPpf
+    ? `Nowa konfiguracja PPF — ${escapeHtml(name)}`
+    : `Nowa wycena — ${escapeHtml(name)}`
+  const tableHeader = isPpf
+    ? `Wybrane strefy (${selectedDetails.length})${pkgLabel ? ` · pakiet ${escapeHtml(pkgLabel)}` : ''}`
+    : `Zaznaczone usługi (${selectedDetails.length})`
+
   return `
 <!doctype html><html><body style="margin:0;background:#08090A;color:#f6f6f7;font-family:-apple-system,'Segoe UI',sans-serif">
 <div style="max-width:600px;margin:0 auto;padding:28px 24px">
-  <p style="margin:0 0 6px;color:#B82119;font-size:11px;letter-spacing:.22em;text-transform:uppercase;font-weight:800">Cars Detailing Radom · Wycena</p>
-  <h1 style="margin:0 0 24px;font-size:28px;line-height:1.1;color:#f6f6f7">Nowa wycena — ${escapeHtml(name)}</h1>
+  <p style="margin:0 0 6px;color:#B82119;font-size:11px;letter-spacing:.22em;text-transform:uppercase;font-weight:800">${eyebrowLabel}</p>
+  <h1 style="margin:0 0 24px;font-size:28px;line-height:1.1;color:#f6f6f7">${h1Label}</h1>
 
   <table style="width:100%;border-collapse:collapse;background:#111214;border-radius:8px;overflow:hidden">
     <tr><td style="padding:10px 14px;color:#9aa0a6;font-size:12px;text-transform:uppercase;letter-spacing:.18em;width:120px">Telefon</td><td style="padding:10px 14px;color:#f6f6f7"><a href="tel:${encodeURIComponent(phone)}" style="color:#f6f6f7;text-decoration:none">${escapeHtml(phone)}</a></td></tr>
@@ -135,12 +159,12 @@ function buildOwnerHtml(payload) {
 
   ${
     rows
-      ? `<h2 style="margin:28px 0 10px;font-size:15px;color:#9aa0a6;font-weight:700;text-transform:uppercase;letter-spacing:.18em">Zaznaczone usługi (${selectedDetails.length})</h2>
+      ? `<h2 style="margin:28px 0 10px;font-size:15px;color:#9aa0a6;font-weight:700;text-transform:uppercase;letter-spacing:.18em">${tableHeader}</h2>
     <table style="width:100%;border-collapse:collapse;background:#111214;border-radius:8px;overflow:hidden">
       ${rows}
       ${subtotalLine}
     </table>`
-      : `<p style="margin:24px 0 0;color:#9aa0a6;font-size:14px">Klient nie zaznaczył usług — wycena na bazie rozmowy.</p>`
+      : `<p style="margin:24px 0 0;color:#9aa0a6;font-size:14px">${isPpf ? 'Klient nie zaznaczył stref — wycena na bazie rozmowy.' : 'Klient nie zaznaczył usług — wycena na bazie rozmowy.'}</p>`
   }
 
   ${
@@ -205,6 +229,8 @@ export default async function handler(req, res) {
 
   const attachments = buildAttachments(body.photos)
 
+  const mode = body.mode === 'ppf' ? 'ppf' : 'cennik'
+
   const payload = {
     name: clean(body.name, MAX_NAME),
     phone: clean(body.phone, MAX_PHONE),
@@ -216,6 +242,8 @@ export default async function handler(req, res) {
     selectedDetails: Array.isArray(body.selectedDetails) ? body.selectedDetails.slice(0, 60) : [],
     subtotal: typeof body.subtotal === 'number' ? body.subtotal : 0,
     hasQuoteOnRequest: !!body.hasQuoteOnRequest,
+    mode,
+    ppfPackageId: typeof body.ppfPackageId === 'string' ? clean(body.ppfPackageId, 48) : null,
     submittedAt: clean(body.submittedAt, 64) || new Date().toISOString(),
     photosCount: attachments.length,
   }
@@ -234,7 +262,15 @@ export default async function handler(req, res) {
 
   // 1) Owner notification
   const photosTag = attachments.length > 0 ? ` · ${attachments.length}📎` : ''
-  const ownerSubject = `Wycena · ${payload.name}${payload.carModel ? ` · ${payload.carModel}` : ''}${photosTag}`
+  let ownerSubject
+  if (payload.mode === 'ppf') {
+    const pkgLabel = payload.ppfPackageId
+      ? PPF_PKG_LABELS[payload.ppfPackageId] || 'Konfiguracja indywidualna'
+      : 'Konfiguracja indywidualna'
+    ownerSubject = `PPF · ${payload.name} · ${pkgLabel}${payload.carModel ? ` · ${payload.carModel}` : ''}${photosTag}`
+  } else {
+    ownerSubject = `Wycena · ${payload.name}${payload.carModel ? ` · ${payload.carModel}` : ''}${photosTag}`
+  }
   const { data: ownerData, error: ownerError } = await resend.emails.send({
     from: fromEmail,
     to: toEmail,

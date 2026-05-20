@@ -2,9 +2,14 @@ import { useState, useEffect } from 'react'
 import { Link, useLocation } from 'react-router-dom'
 import { NAV_ITEMS, BRAND } from '../lib/nav.js'
 
+// Home-page sections tracked by the scroll-spy, in document order.
+// Must match the section `id="…"` attributes on the home page.
+const HOME_SECTIONS = ['hero', 'o-nas', 'uslugi', 'ppf-teaser', 'realizacje', 'kontakt']
+
 export default function Navbar() {
   const [scrolled, setScrolled] = useState(false)
   const [open, setOpen] = useState(false)
+  const [activeHash, setActiveHash] = useState('#hero')
   const { pathname, hash } = useLocation()
 
   useEffect(() => {
@@ -13,6 +18,50 @@ export default function Navbar() {
     window.addEventListener('scroll', onScroll, { passive: true })
     return () => window.removeEventListener('scroll', onScroll)
   }, [])
+
+  // Scroll-spy — track which home section is currently being viewed and expose
+  // it as `activeHash`. Off-home pages get an empty activeHash (the path-based
+  // active checks in `isActive` take over for /ppf and /cennik). The active
+  // line sits at 30% of the viewport from the top — whichever section's top
+  // is the most recently passed above that line wins.
+  useEffect(() => {
+    if (pathname !== '/') {
+      setActiveHash('')
+      return
+    }
+
+    let raf = 0
+    const compute = () => {
+      raf = 0
+      const tracker = window.scrollY + window.innerHeight * 0.3
+      let activeId = HOME_SECTIONS[0]
+      for (const id of HOME_SECTIONS) {
+        const el = document.getElementById(id)
+        if (!el) continue
+        const top = el.getBoundingClientRect().top + window.scrollY
+        if (top <= tracker) {
+          activeId = id
+        } else {
+          // Sections are in document order — anything below the tracker can't be active.
+          break
+        }
+      }
+      setActiveHash('#' + activeId)
+    }
+    const schedule = () => {
+      if (raf) return
+      raf = window.requestAnimationFrame(compute)
+    }
+
+    compute()
+    window.addEventListener('scroll', schedule, { passive: true })
+    window.addEventListener('resize', schedule, { passive: true })
+    return () => {
+      window.removeEventListener('scroll', schedule)
+      window.removeEventListener('resize', schedule)
+      if (raf) window.cancelAnimationFrame(raf)
+    }
+  }, [pathname])
 
   // iOS-safe scroll lock while drawer open
   useEffect(() => {
@@ -74,7 +123,7 @@ export default function Navbar() {
           {/* Desktop menu */}
           <nav className="hidden lg:flex items-center gap-9" aria-label="Główna nawigacja">
             {NAV_ITEMS.map((item) => (
-              <NavItem key={item.label} item={item} isHome={isHome} />
+              <NavItem key={item.label} item={item} isHome={isHome} activeHash={activeHash} pathname={pathname} />
             ))}
           </nav>
 
@@ -135,7 +184,7 @@ export default function Navbar() {
           aria-label="Główna nawigacja (mobile)"
         >
           {NAV_ITEMS.map((item, i) => (
-            <DrawerLink key={item.label} item={item} index={i} open={open} isHome={isHome} />
+            <DrawerLink key={item.label} item={item} index={i} open={open} isHome={isHome} activeHash={activeHash} pathname={pathname} />
           ))}
         </nav>
 
@@ -169,12 +218,13 @@ export default function Navbar() {
   )
 }
 
-function NavItem({ item, isHome }) {
-  const active = isActive(item, isHome)
+function NavItem({ item, isHome, activeHash, pathname }) {
+  const active = isActive(item, isHome, activeHash, pathname)
   const target = item.hash && isHome ? item.hash : item.to + (item.hash || '')
   return (
     <a
       href={target}
+      aria-current={active ? 'true' : undefined}
       className={[
         'relative font-display font-semibold text-[13px] tracking-[0.14em] uppercase pb-2 transition-colors duration-300',
         active ? 'text-accent' : 'text-noir-bright hover:text-accent',
@@ -192,26 +242,36 @@ function NavItem({ item, isHome }) {
   )
 }
 
-function DrawerLink({ item, index, open, isHome }) {
-  const active = isActive(item, isHome)
+function DrawerLink({ item, index, open, isHome, activeHash, pathname }) {
+  const active = isActive(item, isHome, activeHash, pathname)
   const target = item.hash && isHome ? item.hash : item.to + (item.hash || '')
   return (
     <a
       href={target}
+      aria-current={active ? 'true' : undefined}
       className={[
-        'font-impact italic font-black uppercase text-2xl md:text-3xl tracking-[0.04em] transition-all duration-400',
+        'relative font-impact italic font-black uppercase text-2xl md:text-3xl tracking-[0.04em] transition-all duration-400',
         active ? 'text-accent' : 'text-noir-bright hover:text-accent',
         open ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4',
       ].join(' ')}
       style={{ transitionDelay: open ? `${index * 60 + 100}ms` : '0ms' }}
     >
       {item.label}
+      <span
+        className={[
+          'absolute left-1/2 -translate-x-1/2 -bottom-1 h-[2px] w-10 bg-accent origin-center transition-transform duration-400',
+          active ? 'scale-x-100' : 'scale-x-0',
+        ].join(' ')}
+        aria-hidden="true"
+      />
     </a>
   )
 }
 
-function isActive(item, isHome) {
-  if (item.to === '/cennik') return window.location.pathname.startsWith('/cennik')
-  if (item.hash === '#hero' && isHome) return !window.location.hash || window.location.hash === '#hero'
+function isActive(item, isHome, activeHash, pathname) {
+  if (item.to === '/cennik') return pathname.startsWith('/cennik')
+  // PPF item: active on the /ppf route OR while the home-page teaser is in view.
+  if (item.to === '/ppf') return pathname.startsWith('/ppf') || (isHome && activeHash === '#ppf-teaser')
+  if (item.hash && isHome) return item.hash === activeHash
   return false
 }

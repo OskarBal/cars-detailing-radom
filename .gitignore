@@ -28,3 +28,14 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+# PPF source PNGs — regen-able from assets-src/ppf/prompts.md + Higgsfield
+# job IDs. Local copies live on Time Machine + iCloud per
+# reference_local_backup.md. The shipped runtime webps in public/ppf/ ARE
+# tracked (build needs them); only the raw 2400x1792 sources are excluded.
+assets-src/ppf/raw/
+
+# v2.1 rollback safety net — local-only, not for production.
+# Lives in assets-src/ (outside public/) so Vite doesn't ship it to Vercel.
+# One-command rollback: `rm -rf public/ppf && mv assets-src/ppf/v2-1-backup public/ppf`.
+assets-src/ppf/v2-1-backup/

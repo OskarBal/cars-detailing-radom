@@ -17,14 +17,27 @@ const PHOTO_LIMITS = {
 
 const ACCEPTED_TYPES = ['image/jpeg', 'image/png', 'image/webp']
 
-export default function WycenaForm({ open, onClose, selectedIds = [] }) {
+export default function WycenaForm({
+  open,
+  onClose,
+  selectedIds = [],
+  // PPF configurator integration — single package object passed in.
+  // Form derives the synthetic selectedDetails + subtotal internally so
+  // the cennik flow (selectedIds + SERVICE_BY_ID lookup) stays untouched.
+  mode = 'cennik',
+  ppfPackage = null,
+  // Optional pre-fill for the "note" textarea. Used by Ekonomia ochrony
+  // calculator to hand off the car profile (value, km/rok, trasa, okres).
+  prefillNote = '',
+}) {
+  const isPpf = mode === 'ppf'
   const [form, setForm] = useState({
     name: '',
     phone: '',
     email: '',
     carModel: '',
     address: '',
-    note: '',
+    note: prefillNote || '',
   })
   const [status, setStatus] = useState('idle') // idle | sending | sent | error
   const [errorMsg, setErrorMsg] = useState('')
@@ -32,6 +45,10 @@ export default function WycenaForm({ open, onClose, selectedIds = [] }) {
   const [photoErr, setPhotoErr] = useState('')
   const firstFieldRef = useRef(null)
   const dialogRef = useRef(null)
+  // Tracks whether the current `form.note` came from a prefill (calculator
+  // hand-off) or from the user typing. Lets us blow away stale prefill
+  // content on re-open without trashing the user's own edits.
+  const noteFromPrefillRef = useRef(Boolean(prefillNote))
 
   // Auto-focus first field on open; restore body scroll on close.
   useEffect(() => {
@@ -44,6 +61,28 @@ export default function WycenaForm({ open, onClose, selectedIds = [] }) {
       window.clearTimeout(id)
     }
   }, [open])
+
+  // Prefill lifecycle — handles three real paths:
+  //   1) Open from calc with value A → close → reopen from calc with value B:
+  //      always replace the note with the latest prefill (no stale data).
+  //   2) Open from calc → close → reopen from a non-calc CTA (no prefill):
+  //      wipe the prefill-sourced note so we don't ship the previous calc
+  //      profile attached to an unrelated lead.
+  //   3) Open from calc → user edits the textarea → close → reopen:
+  //      preserve the user's typed content (their keystrokes flip the
+  //      `noteFromPrefillRef` flag off, so the wipe in case 2 stays its hand).
+  useEffect(() => {
+    if (!open) return
+    if (prefillNote) {
+      setForm((f) => ({ ...f, note: prefillNote }))
+      noteFromPrefillRef.current = true
+      return
+    }
+    if (noteFromPrefillRef.current) {
+      setForm((f) => ({ ...f, note: '' }))
+      noteFromPrefillRef.current = false
+    }
+  }, [open, prefillNote])
 
   // Escape to close
   useEffect(() => {
@@ -63,22 +102,38 @@ export default function WycenaForm({ open, onClose, selectedIds = [] }) {
       setPhotos([])
       setPhotoErr('')
       setStatus('idle')
+      noteFromPrefillRef.current = false
     }
   }, [open, status])
 
-  const onChange = (e) =>
+  const onChange = (e) => {
+    // User typing in the note textarea flips the prefill flag off so we
+    // don't wipe their keystrokes on the next re-open (see prefill lifecycle).
+    if (e.target.name === 'note') noteFromPrefillRef.current = false
     setForm((f) => ({ ...f, [e.target.name]: e.target.value }))
+  }
 
-  const selectedDetails = selectedIds
-    .map((id) => SERVICE_BY_ID[id])
-    .filter(Boolean)
+  const selectedDetails = isPpf
+    ? (ppfPackage
+        ? [{
+            id: ppfPackage.id,
+            name: ppfPackage.name,
+            categoryName: 'Folia PPF',
+            priceFrom: ppfPackage.priceFrom,
+            quoteOnRequest: false,
+          }]
+        : [])
+    : selectedIds.map((id) => SERVICE_BY_ID[id]).filter(Boolean)
 
-  const subtotal = selectedDetails.reduce(
-    (sum, s) => sum + (s.quoteOnRequest ? 0 : s.priceFrom || 0),
-    0,
-  )
-  const hasQuoteOnRequest = selectedDetails.some((s) => s.quoteOnRequest)
-  const hasDoorToDoor = selectedIds.includes('door-to-door')
+  const subtotal = isPpf
+    ? (ppfPackage?.priceFrom || 0)
+    : selectedDetails.reduce(
+        (sum, s) => sum + (s.quoteOnRequest ? 0 : s.priceFrom || 0),
+        0,
+      )
+  const hasQuoteOnRequest = !isPpf && selectedDetails.some((s) => s.quoteOnRequest)
+  // PPF flow has no door-to-door coupling.
+  const hasDoorToDoor = !isPpf && selectedIds.includes('door-to-door')
 
   const onSubmit = async (e) => {
     e.preventDefault()
@@ -115,6 +170,8 @@ export default function WycenaForm({ open, onClose, selectedIds = [] }) {
           })),
           subtotal,
           hasQuoteOnRequest,
+          mode,
+          ppfPackageId: ppfPackage?.id || null,
           photos: readyPhotos,
           submittedAt: new Date().toISOString(),
         }),
@@ -159,13 +216,13 @@ export default function WycenaForm({ open, onClose, selectedIds = [] }) {
         <div className="sticky top-0 z-10 flex items-start justify-between gap-4 px-6 md:px-8 py-5 bg-noir-surface/95 backdrop-blur-md border-b border-hairline">
           <div>
             <p className="text-accent font-display font-bold text-[11px] tracking-[0.22em] uppercase mb-1">
-              Szczegółowa wycena · 15 minut
+              {isPpf ? 'Wycena PPF · 15 minut' : 'Szczegółowa wycena · 15 minut'}
             </p>
             <h2
               id="wycena-heading"
               className="font-impact italic font-black uppercase text-[clamp(1.5rem,3.4vw,2.1rem)] leading-[0.95]"
             >
-              Szczegółowa&nbsp;wycena
+              {isPpf ? <>Wycena&nbsp;PPF</> : <>Szczegółowa&nbsp;wycena</>}
             </h2>
           </div>
           <button

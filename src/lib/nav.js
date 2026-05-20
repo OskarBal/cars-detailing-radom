@@ -5,6 +5,7 @@ export const NAV_ITEMS = [
   { label: 'Strona główna', to: '/',       hash: '#hero'       },
   { label: 'O nas',         to: '/',       hash: '#o-nas'      },
   { label: 'Usługi',        to: '/',       hash: '#uslugi'     },
+  { label: 'PPF',           to: '/ppf',    hash: null          },
   { label: 'Realizacje',    to: '/',       hash: '#realizacje' },
   { label: 'Cennik',        to: '/cennik', hash: null          },
   { label: 'Kontakt',       to: '/',       hash: '#kontakt'    },

@@ -264,3 +264,50 @@ html { scroll-behavior: smooth; }
   .glitch-title::before,
   .glitch-title::after { opacity: 0; }
 }
+
+/* =========================================================
+   Ekonomia ochrony — ValueCalculator
+   (1) Hero "zł/dzień" number pulses briefly on value change.
+   (2) Comparator rows stamp in with stagger on scroll-into-view.
+   ========================================================= */
+
+/* Hero number: brief opacity + scale pulse when React re-keys it.
+   The `key={pricePerDayStr}` on the wrapper forces remount, which
+   restarts this 380ms animation. Subtle enough to feel alive, not
+   distracting on a fast slider. */
+.vc-hero-pulse {
+  animation: vc-hero-pulse 380ms var(--ease-apple, cubic-bezier(0.32, 0.72, 0, 1)) both;
+}
+@keyframes vc-hero-pulse {
+  0%   { opacity: 0.45; transform: translate3d(0, 2px, 0); }
+  60%  { opacity: 1;    transform: translate3d(0, 0,   0); }
+  100% { opacity: 1;    transform: translate3d(0, 0,   0); }
+}
+
+/* Comparator rows: hidden until IntersectionObserver flips
+   data-in-view="true" on the wrapper. Then each row uses its own
+   --vc-delay custom property to stamp in. */
+.vc-compare .vc-compare-row {
+  opacity: 0;
+  transform: translate3d(0, 8px, 0);
+}
+.vc-compare[data-in-view='true'] .vc-compare-row {
+  animation: vc-row-in 520ms var(--ease-apple, cubic-bezier(0.32, 0.72, 0, 1)) both;
+  animation-delay: var(--vc-delay, 0s);
+}
+@keyframes vc-row-in {
+  0%   { opacity: 0; transform: translate3d(0, 8px, 0); }
+  100% { opacity: 1; transform: translate3d(0, 0,   0); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .vc-hero-pulse,
+  .vc-compare[data-in-view='true'] .vc-compare-row {
+    animation: none;
+  }
+  .vc-compare .vc-compare-row {
+    opacity: 1;
+    transform: none;
+  }
+}
+
