@@ -28,7 +28,7 @@ const CARS = [
 const BOAT = {
   src: '/ppf/realizacje/05-boat-polish.webp',
   alt: 'Polerowanie kadłuba łodzi motorowej w hali Cars Detailing Radom — przygotowanie pod zabezpieczenie powłoką.',
-  ratio: '700 / 1516',
+  ratio: '4 / 5',
   label: 'Łódź motorowa · polerka kadłuba',
 }
 
@@ -66,32 +66,34 @@ export default function Realizacje() {
         </div>
 
         <div className="mt-14 md:mt-20 pt-10 md:pt-12 border-t border-hairline">
-          <p className="text-accent font-display font-bold text-[11px] tracking-[0.22em] uppercase mb-3">
-            Łodzie i sprzęt
-          </p>
-          <h3 className="font-impact italic font-black uppercase leading-[0.95] text-[clamp(1.5rem,3.5vw,2.4rem)] mb-3">
-            Nie tylko auta.
-          </h3>
-          <p className="text-noir-muted text-base md:text-[17px] leading-relaxed mb-8 max-w-2xl">
-            Łodzie, motocykle, sprzęt firmowy — wszędzie tam, gdzie powierzchnia musi przetrwać sezon
-            w&nbsp;trudniejszych warunkach niż auto na ulicy.
-          </p>
-          <div className="grid grid-cols-1 md:grid-cols-[minmax(0,380px)_1fr] gap-6 md:gap-10 items-start">
-            <RealizacjaCard item={BOAT} />
-            <ul className="text-noir-muted text-[15px] md:text-base leading-relaxed space-y-3 md:pt-2">
-              <li>
-                <span className="text-noir-bright font-display font-bold uppercase tracking-wide text-[12px] mr-2">Kadłub:</span>
-                korekta lakieru + powłoka ochronna pod sezon na wodzie.
-              </li>
-              <li>
-                <span className="text-noir-bright font-display font-bold uppercase tracking-wide text-[12px] mr-2">Pokład:</span>
-                przygotowanie powierzchni, antypoślizg, ochrona elementów żelkotu.
-              </li>
-              <li>
-                <span className="text-noir-bright font-display font-bold uppercase tracking-wide text-[12px] mr-2">Wycena:</span>
-                indywidualna — długość, stan, zakres pracy. Zadzwoń, ustalimy zakres na miejscu.
-              </li>
-            </ul>
+          <div className="grid grid-cols-1 md:grid-cols-[minmax(0,260px)_1fr] gap-6 md:gap-10 items-start">
+            <RealizacjaCard item={BOAT} className="w-full max-w-[260px]" />
+            <div>
+              <p className="text-accent font-display font-bold text-[11px] tracking-[0.22em] uppercase mb-3">
+                Łodzie i sprzęt
+              </p>
+              <h3 className="font-impact italic font-black uppercase leading-[0.95] text-[clamp(1.5rem,3.5vw,2.4rem)] mb-3">
+                Nie tylko auta.
+              </h3>
+              <p className="text-noir-muted text-base md:text-[17px] leading-relaxed mb-6 max-w-2xl">
+                Łodzie, motocykle, sprzęt firmowy — wszędzie tam, gdzie powierzchnia musi przetrwać sezon
+                w&nbsp;trudniejszych warunkach niż auto na ulicy.
+              </p>
+              <ul className="text-noir-muted text-[15px] md:text-base leading-relaxed space-y-3">
+                <li>
+                  <span className="text-noir-bright font-display font-bold uppercase tracking-wide text-[12px] mr-2">Kadłub:</span>
+                  korekta lakieru + powłoka ochronna pod sezon na wodzie.
+                </li>
+                <li>
+                  <span className="text-noir-bright font-display font-bold uppercase tracking-wide text-[12px] mr-2">Pokład:</span>
+                  przygotowanie powierzchni, antypoślizg, ochrona elementów żelkotu.
+                </li>
+                <li>
+                  <span className="text-noir-bright font-display font-bold uppercase tracking-wide text-[12px] mr-2">Wycena:</span>
+                  indywidualna — długość, stan, zakres pracy. Zadzwoń, ustalimy zakres na miejscu.
+                </li>
+              </ul>
+            </div>
           </div>
         </div>
       </div>
