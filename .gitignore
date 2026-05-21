@@ -39,3 +39,7 @@ assets-src/ppf/raw/
 # Lives in assets-src/ (outside public/) so Vite doesn't ship it to Vercel.
 # One-command rollback: `rm -rf public/ppf && mv assets-src/ppf/v2-1-backup public/ppf`.
 assets-src/ppf/v2-1-backup/
+
+# About / O nas raw PNGs — regen-able from assets-src/about/prompts.md
+# + Higgsfield job IDs. Shipped webp in public/about/ is tracked.
+assets-src/about/raw/

@@ -5,7 +5,7 @@ export default function About() {
       aria-label="O nas"
       className="relative bg-noir-deep text-noir-bright pt-10 md:pt-16 pb-20 md:pb-32 px-6 md:px-10"
     >
-      <div className="mx-auto max-w-[1100px] grid md:grid-cols-[1fr_1.2fr] gap-12 md:gap-16 items-center">
+      <div className="mx-auto max-w-[1200px] grid md:grid-cols-[1fr_1.5fr] gap-10 md:gap-14 items-center">
 
         <div>
           <p className="text-accent font-display font-bold text-[12px] tracking-[0.22em] uppercase mb-4">
@@ -33,14 +33,18 @@ export default function About() {
           </dl>
         </div>
 
-        <div className="relative aspect-[4/3] rounded-2xl overflow-hidden border border-hairline bg-noir-surface">
-          <div
-            className="absolute inset-0 bg-cover bg-center"
-            style={{ backgroundImage: "url('/hero-bg.webp')" }}
-            aria-hidden
+        <figure className="relative aspect-[16/9] rounded-2xl overflow-hidden border border-hairline bg-noir-surface">
+          <img
+            src="/about/zespol-hero.webp"
+            alt="Trzech detailerów Cars Detailing Radom w czarnych koszulkach z kursywnym logo na plecach, stoi przy czarnym Mercedesie-AMG G63 w studio z czerwoną podłogą — gotowi do detailingu."
+            width="1920"
+            height="1080"
+            loading="lazy"
+            decoding="async"
+            className="absolute inset-0 h-full w-full object-cover"
           />
-          <div className="absolute inset-0 bg-gradient-to-t from-noir-deep/60 to-transparent" aria-hidden />
-        </div>
+          <div className="absolute inset-0 bg-gradient-to-t from-noir-deep/40 via-transparent to-transparent" aria-hidden />
+        </figure>
 
       </div>
     </section>
