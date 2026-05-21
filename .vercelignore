@@ -1,0 +1,21 @@
+# Files excluded from Vercel uploads (separate from .gitignore — Vercel
+# CLI uploads from the project root, not from git).
+
+# Heavy local-only source PNGs — regen-able from assets-src/ppf/prompts.md
+# (134 MB; not needed for build, the shipped webps in public/ppf/ are).
+assets-src/
+
+# Build artifacts — Vercel rebuilds these from source.
+dist/
+node_modules/
+
+# Local secrets / env (defense in depth — already gitignored).
+.env
+.env.local
+.env.*.local
+
+# Editor cruft.
+.DS_Store
+.vscode/
+.idea/
+*.swp

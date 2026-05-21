@@ -13,7 +13,7 @@ import PackageSummary from '../components/ppf/PackageSummary.jsx'
 import PpfStickyBar from '../components/ppf/PpfStickyBar.jsx'
 import SpecsBlock from '../components/ppf/SpecsBlock.jsx'
 import ValueCalculator from '../components/ppf/ValueCalculator.jsx'
-import RealizacjePlaceholder from '../components/ppf/RealizacjePlaceholder.jsx'
+import Realizacje from '../components/ppf/Realizacje.jsx'
 import Faq from '../components/ppf/Faq.jsx'
 import FinalCta from '../components/ppf/FinalCta.jsx'
 
@@ -153,7 +153,7 @@ export default function PPF() {
         activePackageId={activePackageId}
         onOpenFormWithNote={openFormWithNote}
       />
-      <RealizacjePlaceholder />
+      <Realizacje />
       <Faq />
       <FinalCta onOpenForm={openForm} activePackage={activePackage} />
 

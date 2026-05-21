@@ -1,6 +1,10 @@
 const SPECS = [
   { label: 'Gwarancja',        value: '10 lat',                                                  sub: 'na samą folię' },
-  { label: 'Samoregeneracja',  value: 'Tak',                                                     sub: 'mikrorysy znikają w cieple' },
+  // ∞ in Barlow Condensed renders visually smaller than letter glyphs at the
+  // same point size — bump 1.35× so it carries the same weight as "10 lat",
+  // "Top coat", etc. in the adjacent cells. Inline-block keeps the parent's
+  // leading-none from clipping the taller glyph.
+  { label: 'Samoregeneracja',  value: <span className="inline-block align-baseline" style={{ fontSize: '1.35em', lineHeight: 0.85 }}>∞</span>, sub: 'mikrorysy znikają w cieple' },
   { label: 'Hydrofobowość',    value: 'Top coat',                                                sub: 'woda spływa, kurz nie wnika' },
   // Unit wrapped in normal-case span so CSS `uppercase` on the parent doesn't
   // flip the micro sign (µ) to capital Greek mu (Μ).
