@@ -179,7 +179,7 @@ export const PROMO_OF_THE_MONTH = {
     'Powłoka elastomerowa — 1 800 zł',
   ],
   priceFrom: 1600,
-  priceCompare: null,
+  priceCompare: 2400, // ceramika 1 600 + jednoetapowa korekta 800 bought separately
   scarcity: 'Oferta ważna w czerwcu · liczba miejsc ograniczona',
   cta: { label: 'Zadzwoń i zarezerwuj', href: 'tel:+48690426050' },
 }
