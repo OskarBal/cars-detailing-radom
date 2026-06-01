@@ -169,17 +169,17 @@ export function formatZl(n) {
    ────────────────────────────────────────────────────────────────────── */
 export const PROMO_OF_THE_MONTH = {
   active: true,
-  monthLabel: 'Maj 2026',
-  eyebrow: 'Pakiet maja',
-  title: 'Wiosenne odświeżenie',
-  subtitle: 'Pełen detailing + ceramika powłok 9H w jednej cenie sezonowej.',
+  monthLabel: 'Czerwiec 2026',
+  eyebrow: 'Oferta czerwca',
+  title: 'Powłoka ceramiczna z korektą lakieru',
+  subtitle: 'Jednoetapowa korekta lakieru wliczona w cenę — nakładamy ceramikę na lakier po polerze, nie na rysy.',
   includes: [
-    'Pełen detailing zewnętrzny',
-    'Pełen detailing wnętrza',
-    'Ceramika powłok 9H',
+    'Jednoetapowa korekta lakieru',
+    'Powłoka ceramiczna — 1 600 zł',
+    'Powłoka elastomerowa — 1 800 zł',
   ],
-  priceFrom: 1500,
-  priceCompare: 1900, // null = no compare price shown
-  scarcity: 'Limit 8 aut · do 31 maja',
-  cta: { label: 'Zamów pakiet', href: '/cennik#detailing-wnetrza' },
+  priceFrom: 1600,
+  priceCompare: null,
+  scarcity: 'Oferta ważna w czerwcu · liczba miejsc ograniczona',
+  cta: { label: 'Zadzwoń i zarezerwuj', href: 'tel:+48690426050' },
 }
