@@ -169,17 +169,17 @@ export function formatZl(n) {
    ────────────────────────────────────────────────────────────────────── */
 export const PROMO_OF_THE_MONTH = {
   active: true,
-  monthLabel: 'Czerwiec 2026',
-  eyebrow: 'Oferta czerwca',
-  title: 'Powłoka ceramiczna z korektą lakieru',
-  subtitle: 'Jednoetapowa korekta lakieru wliczona w cenę — nakładamy ceramikę na lakier po polerze, nie na rysy.',
+  monthLabel: 'Lipiec 2026',
+  eyebrow: 'Oferta lipca',
+  title: 'Powłoka elastomerowa',
+  subtitle: 'Elastyczna powłoka z pamięcią kształtu — drobne mikrorysy znikają same pod wpływem ciepła, a lakier zostaje chroniony przez 4 lata.',
   includes: [
-    'Jednoetapowa korekta lakieru',
-    'Powłoka ceramiczna — 1 600 zł',
-    'Powłoka elastomerowa — 1 800 zł',
+    '4 lata ochrony lakieru',
+    'Efekt samoregeneracji mikrorys',
+    'Warstwa pamięci kształtu — chroni przed odpryskami kamieni',
   ],
-  priceFrom: 1600,
-  priceCompare: 2400, // ceramika 1 600 + jednoetapowa korekta 800 bought separately
-  scarcity: 'Oferta ważna w czerwcu · liczba miejsc ograniczona',
+  priceFrom: 1800,
+  priceCompare: 2200, // regularna cena powłoki elastomerowej (cennik) → oszczędność 400 zł
+  scarcity: 'Oferta ważna w lipcu · liczba miejsc ograniczona',
   cta: { label: 'Zadzwoń i zarezerwuj', href: 'tel:+48690426050' },
 }

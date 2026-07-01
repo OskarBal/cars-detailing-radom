@@ -1,15 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
 
 export default function Hero() {
-  const [isMobile, setIsMobile] = useState(false)
-  useEffect(() => {
-    const mq = window.matchMedia('(max-width: 899px)')
-    const sync = () => setIsMobile(mq.matches)
-    sync()
-    mq.addEventListener('change', sync)
-    return () => mq.removeEventListener('change', sync)
-  }, [])
-
   return (
     <section
       id="hero"
@@ -51,7 +42,7 @@ export default function Hero() {
                 filter: 'drop-shadow(0 2px 0 rgba(0,0,0,.5)) drop-shadow(0 12px 28px rgba(0,0,0,.65))',
               }}
             >
-              TWOJE AUTO.
+              DETAILING
             </span>
             <span
               className="block bg-clip-text text-transparent"
@@ -60,26 +51,49 @@ export default function Hero() {
                 filter: 'drop-shadow(0 2px 0 rgba(0,0,0,.5)) drop-shadow(0 12px 28px rgba(184,33,25,.22))',
               }}
             >
-              NASZA PASJA.
+              RADOM.
             </span>
           </h1>
 
           <p
             className="text-noir-bright md:text-noir-muted text-[17px] md:text-[clamp(0.98rem,1.15vw,1.12rem)] font-medium md:font-normal leading-relaxed max-w-[36ch]"
-            style={isMobile ? { textShadow: '0 1px 1px rgba(0,0,0,.95), 0 2px 6px rgba(0,0,0,.9), 0 8px 28px rgba(0,0,0,.75)' } : {}}
+            style={{ textShadow: '0 1px 1px rgba(0,0,0,.95), 0 2px 6px rgba(0,0,0,.9), 0 8px 28px rgba(0,0,0,.75)' }}
           >
-            Profesjonalna pielęgnacja samochodu.<br />
+            Korekta lakieru, powłoki ceramiczne, PPF i detailing wnętrza.<br />
             Z pasją. Z precyzją. Z gwarancją efektu.
           </p>
         </div>
 
-        <div className="flex flex-wrap gap-2.5 md:gap-3.5 w-full">
-          {isMobile ? <MobileCTAs /> : <DesktopCTAs />}
+        {/* CTAs — both rendered in HTML, CSS toggles visibility to avoid JS-driven CLS */}
+        <div className="w-full">
+          <div className="flex md:hidden flex-wrap gap-2.5 w-full">
+            <MobileCTAs />
+          </div>
+          <div className="hidden md:flex flex-wrap gap-3.5 w-full">
+            <DesktopCTAs />
+          </div>
         </div>
       </div>
 
-      {/* Feature panels */}
-      <FeaturePanels isMobile={isMobile} />
+      {/* Feature panels — both rendered in HTML, CSS toggles */}
+      <div className="md:hidden w-full max-w-[1600px] mx-auto">
+        <MobileFeatureCarousel features={FEATURES} />
+      </div>
+      <div className="hidden md:grid grid-cols-2 lg:grid-cols-4 gap-1.5 md:gap-3 w-full max-w-[1600px] mx-auto">
+        {FEATURES.map((f) => (
+          <article
+            key={f.title}
+            className="flex items-start gap-3 p-3 md:p-4 rounded-xl border border-hairline backdrop-blur-xl bg-noir-deep/45 md:bg-white/[0.04] transition-all duration-400 hover:-translate-y-0.5 hover:border-accent/40 hover:bg-accent/[0.06]"
+            style={{ backgroundImage: PANEL_BG, boxShadow: PANEL_SHADOW }}
+          >
+            <FeatureIcon name={f.icon} />
+            <div className="min-w-0">
+              <h3 className="font-display font-bold text-[10.5px] md:text-[11.5px] tracking-[0.13em] uppercase text-noir-bright mb-1">{f.title}</h3>
+              <p className="text-[11.5px] md:text-[12.5px] leading-snug text-noir-muted">{f.body}</p>
+            </div>
+          </article>
+        ))}
+      </div>
     </section>
   )
 }
@@ -146,36 +160,18 @@ const FEATURES = [
 const PANEL_BG = 'linear-gradient(140deg, rgba(246,246,247,.07) 0%, rgba(246,246,247,.015) 55%, rgba(246,246,247,.04) 100%)'
 const PANEL_SHADOW = 'inset 0 1px 0 0 rgba(255,255,255,.10), inset 0 -1px 0 0 rgba(0,0,0,.18), 0 18px 44px -20px rgba(0,0,0,.55)'
 
-function FeaturePanels({ isMobile }) {
-  if (isMobile) return <MobileFeatureCarousel features={FEATURES} />
-
-  return (
-    <div className="relative grid grid-cols-2 lg:grid-cols-4 gap-1.5 md:gap-3 w-full max-w-[1600px] mx-auto">
-      {FEATURES.map((f) => (
-        <article
-          key={f.title}
-          className="flex items-start gap-3 p-3 md:p-4 rounded-xl border border-hairline backdrop-blur-xl bg-noir-deep/45 md:bg-white/[0.04] transition-all duration-400 hover:-translate-y-0.5 hover:border-accent/40 hover:bg-accent/[0.06]"
-          style={{ backgroundImage: PANEL_BG, boxShadow: PANEL_SHADOW }}
-        >
-          <FeatureIcon name={f.icon} />
-          <div className="min-w-0">
-            <h3 className="font-display font-bold text-[10.5px] md:text-[11.5px] tracking-[0.13em] uppercase text-noir-bright mb-1">{f.title}</h3>
-            <p className="text-[11.5px] md:text-[12.5px] leading-snug text-noir-muted">{f.body}</p>
-          </div>
-        </article>
-      ))}
-    </div>
-  )
-}
-
 function MobileFeatureCarousel({ features }) {
   const n = features.length
   const AUTO_MS = 2000
   const SLIDE_MS = 520
 
-  const [index, setIndex] = useState(0)            // 0..n (n = clone of first for seamless wrap)
+  const [index, setIndex] = useState(0)
   const [isDragging, setIsDragging] = useState(false)
-  const [reduced, setReduced] = useState(false)
+  const [reduced, setReduced] = useState(() =>
+    typeof window !== 'undefined'
+      ? window.matchMedia('(prefers-reduced-motion: reduce)').matches
+      : false,
+  )
   const [transitionOn, setTransitionOn] = useState(true)
   const [dragOffset, setDragOffset] = useState(0)
   const draggingRef = useRef(false)
@@ -183,20 +179,17 @@ function MobileFeatureCarousel({ features }) {
 
   useEffect(() => {
     const mq = window.matchMedia('(prefers-reduced-motion: reduce)')
-    setReduced(mq.matches)
     const handler = (e) => setReduced(e.matches)
     mq.addEventListener('change', handler)
     return () => mq.removeEventListener('change', handler)
   }, [])
 
-  // Auto-cycle — pauses only during an active drag, otherwise runs forever
   useEffect(() => {
     if (isDragging || reduced) return
     const id = setInterval(() => setIndex((i) => i + 1), AUTO_MS)
     return () => clearInterval(id)
   }, [isDragging, reduced])
 
-  // Seamless wrap: after sliding to the clone, snap back to 0 without animation
   useEffect(() => {
     if (index < n) return
     const t = setTimeout(() => {

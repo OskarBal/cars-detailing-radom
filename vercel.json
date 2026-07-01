@@ -3,7 +3,81 @@
   "framework": "vite",
   "buildCommand": "npm run build",
   "outputDirectory": "dist",
-  "rewrites": [
-    { "source": "/((?!api/).*)", "destination": "/index.html" }
+  "headers": [
+    {
+      "source": "/:path*.(webp|jpg|jpeg|png|ico|svg|woff2|woff)",
+      "headers": [
+        { "key": "Cache-Control", "value": "public, max-age=31536000, immutable" }
+      ]
+    },
+    {
+      "source": "/assets/:path*",
+      "headers": [
+        { "key": "Cache-Control", "value": "public, max-age=31536000, immutable" }
+      ]
+    }
+  ],
+  "redirects": [
+    {
+      "source": "/(.*)",
+      "has": [{ "type": "host", "value": "www.carsdetailingradom.pl" }],
+      "destination": "https://carsdetailingradom.pl/$1",
+      "permanent": true
+    },
+    {
+      "source": "/index.html",
+      "destination": "/",
+      "permanent": true
+    },
+    {
+      "source": "/index",
+      "destination": "/",
+      "permanent": true
+    },
+    {
+      "source": "/cennik/",
+      "destination": "/cennik",
+      "permanent": true
+    },
+    {
+      "source": "/ppf/",
+      "destination": "/ppf",
+      "permanent": true
+    },
+    {
+      "source": "/auto-detailing-radom/",
+      "destination": "/auto-detailing-radom",
+      "permanent": true
+    },
+    {
+      "source": "/powloki-ceramiczne-radom/",
+      "destination": "/powloki-ceramiczne-radom",
+      "permanent": true
+    },
+    {
+      "source": "/korekta-lakieru-radom/",
+      "destination": "/korekta-lakieru-radom",
+      "permanent": true
+    },
+    {
+      "source": "/pranie-tapicerki-radom/",
+      "destination": "/pranie-tapicerki-radom",
+      "permanent": true
+    },
+    {
+      "source": "/detailing-wnetrza-radom/",
+      "destination": "/detailing-wnetrza-radom",
+      "permanent": true
+    },
+    {
+      "source": "/folie-ppf-radom",
+      "destination": "/ppf",
+      "permanent": true
+    },
+    {
+      "source": "/folie-ppf-radom/",
+      "destination": "/ppf",
+      "permanent": true
+    }
   ]
 }

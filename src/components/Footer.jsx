@@ -50,9 +50,17 @@ export default function Footer() {
           <p className="text-xs text-noir-faint">
             © {new Date().getFullYear()} {BRAND.name}. Wszystkie prawa zastrzeżone.
           </p>
-          <Link to="/regulamin" className="text-xs text-noir-faint hover:text-accent transition-colors">
-            Regulamin
-          </Link>
+          <div className="flex flex-wrap items-center gap-x-5 gap-y-1">
+            <Link to="/regulamin" className="text-xs text-noir-faint hover:text-accent transition-colors">
+              Regulamin
+            </Link>
+            <Link to="/polityka-prywatnosci" className="text-xs text-noir-faint hover:text-accent transition-colors">
+              Polityka prywatności
+            </Link>
+            <Link to="/cookies" className="text-xs text-noir-faint hover:text-accent transition-colors">
+              Cookies
+            </Link>
+          </div>
         </div>
       </div>
     </footer>

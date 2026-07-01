@@ -4,18 +4,144 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
     <meta name="theme-color" content="#08090A" />
-    <link rel="icon" type="image/webp" href="/logo.webp" />
 
-    <title>Cars Detailing Radom — Perfekcja w każdym detalu</title>
+    <!--ssr-head-->
+    <title>Auto detailing Radom | Cars Detailing Radom</title>
     <meta name="description" content="Profesjonalna pielęgnacja samochodu w Radomiu. Ceramika, PPF, korekta lakieru, pranie tapicerki, door-to-door. Studio przy ul. Opolskiej 46A." />
+    <link rel="canonical" href="https://carsdetailingradom.pl/" />
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="Cars Detailing Radom" />
+    <meta property="og:locale" content="pl_PL" />
+    <meta property="og:url" content="https://carsdetailingradom.pl/" />
+    <meta property="og:title" content="Auto detailing Radom | Cars Detailing Radom" />
+    <meta property="og:description" content="Profesjonalna pielęgnacja samochodu w Radomiu. Ceramika, PPF, korekta lakieru, pranie tapicerki, door-to-door. Studio przy ul. Opolskiej 46A." />
+    <meta property="og:image" content="https://carsdetailingradom.pl/og-image.jpg" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content="Cars Detailing Radom" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Auto detailing Radom | Cars Detailing Radom" />
+    <meta name="twitter:description" content="Profesjonalna pielęgnacja samochodu w Radomiu. Ceramika, PPF, korekta lakieru, pranie tapicerki, door-to-door." />
+    <meta name="twitter:image" content="https://carsdetailingradom.pl/og-image.jpg" />
+    <!--/ssr-head-->
 
-    <link rel="preload" as="image" href="/hero-bg.webp" fetchpriority="high" />
+    <!-- Favicons -->
+    <link rel="icon" href="/favicon.ico" sizes="any" />
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png" />
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16.png" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+    <link rel="manifest" href="/site.webmanifest" />
+
+    <!-- JSON-LD: AutoBodyShop / LocalBusiness -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "AutoBodyShop",
+      "@id": "https://carsdetailingradom.pl/#business",
+      "name": "Cars Detailing Radom",
+      "legalName": "PUH Agat Tomasz Gorczyca",
+      "url": "https://carsdetailingradom.pl/",
+      "description": "Premium auto detailing w Radomiu: powłoki ceramiczne, folie ochronne PPF, korekta lakieru, detailing wnętrza, pranie tapicerki i usługa door-to-door.",
+      "slogan": "Perfekcja w każdym detalu",
+      "image": "https://carsdetailingradom.pl/og-image.jpg",
+      "logo": "https://carsdetailingradom.pl/logo.webp",
+      "telephone": "+48690426050",
+      "priceRange": "$$$",
+      "taxID": "9482480605",
+      "address": {
+        "@type": "PostalAddress",
+        "streetAddress": "ul. Opolska 46A",
+        "addressLocality": "Radom",
+        "postalCode": "26-606",
+        "addressRegion": "mazowieckie",
+        "addressCountry": "PL"
+      },
+      "geo": {
+        "@type": "GeoCoordinates",
+        "latitude": 51.362203,
+        "longitude": 21.154667
+      },
+      "areaServed": [
+        { "@type": "City", "name": "Radom" },
+        { "@type": "AdministrativeArea", "name": "powiat radomski" }
+      ],
+      "sameAs": [
+        "https://www.tiktok.com/@carsdetailingradom"
+      ],
+      "hasMap": "https://www.google.com/maps/place/Cars+Detailing+RADOM",
+      "contactPoint": {
+        "@type": "ContactPoint",
+        "telephone": "+48690426050",
+        "contactType": "customer service",
+        "areaServed": "PL",
+        "availableLanguage": ["pl"]
+      },
+      "knowsAbout": [
+        "auto detailing Radom",
+        "powłoka ceramiczna Radom",
+        "folia PPF Radom",
+        "korekta lakieru Radom",
+        "pranie tapicerki samochodowej Radom",
+        "detailing wnętrza Radom",
+        "door-to-door detailing Radom"
+      ],
+      "makesOffer": [
+        { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Powłoka ceramiczna" } },
+        { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Folia ochronna PPF" } },
+        { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Korekta lakieru" } },
+        { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Polerowanie lakieru" } },
+        { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Pranie tapicerki" } },
+        { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Detailing wnętrza" } },
+        { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Usuwanie wgnieceń PDR" } },
+        { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Zabezpieczenie felg" } },
+        { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Powłoka hydrofobowa na szyby" } },
+        { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Przygotowanie auta do sprzedaży" } },
+        { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Door-to-door — odbiór i zwrot auta" } },
+        { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Obsługa mobilna u klienta" } }
+      ]
+    }
+    </script>
+
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&family=Barlow+Condensed:ital,wght@0,800;0,900;1,800;1,900&display=swap" rel="stylesheet" />
+    <!-- Non-blocking font load: HTML renders immediately in fallback font; custom fonts swap in -->
+    <link rel="preload" href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&family=Barlow+Condensed:ital,wght@0,800;0,900;1,800;1,900&display=swap" as="style" onload="this.onload=null;this.rel='stylesheet'" />
+    <noscript><link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&family=Barlow+Condensed:ital,wght@0,800;0,900;1,800;1,900&display=swap" rel="stylesheet" /></noscript>
+
+    <!-- Google Consent Mode v2 + GA4 (gated by /cookies banner) -->
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+
+      // 1. Default to DENIED before any tag fires — RODO requires opt-in.
+      gtag('consent', 'default', {
+        analytics_storage: 'denied',
+        ad_storage: 'denied',
+        ad_user_data: 'denied',
+        ad_personalization: 'denied',
+        wait_for_update: 500
+      });
+
+      // 2. Replay prior consent stored from earlier visits, if any.
+      try {
+        var stored = JSON.parse(localStorage.getItem('cdr.consent.v1') || 'null');
+        if (stored) {
+          gtag('consent', 'update', {
+            analytics_storage:  stored.analytics ? 'granted' : 'denied',
+            ad_storage:         stored.marketing ? 'granted' : 'denied',
+            ad_user_data:       stored.marketing ? 'granted' : 'denied',
+            ad_personalization: stored.marketing ? 'granted' : 'denied'
+          });
+        }
+      } catch (e) { /* private mode — fall through with denied default */ }
+
+      gtag('js', new Date());
+      gtag('config', 'G-QPSLBW5HVY');
+    </script>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-QPSLBW5HVY"></script>
   </head>
   <body>
-    <div id="root"></div>
-    <script type="module" src="/src/main.jsx"></script>
+    <div id="root"><!--ssr-outlet--></div>
+    <script type="module" src="/src/entry-client.jsx"></script>
   </body>
 </html>

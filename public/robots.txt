@@ -1,0 +1,34 @@
+User-agent: *
+Allow: /
+Disallow: /api/
+
+# OpenAI / ChatGPT Search visibility.
+User-agent: OAI-SearchBot
+Allow: /
+Disallow: /api/
+
+# OpenAI model-training crawler. Keep allowed if the owner wants LLMs to learn
+# the public business facts; remove this block to opt out of training only.
+User-agent: GPTBot
+Allow: /
+Disallow: /api/
+
+# User-triggered ChatGPT browsing and Custom GPT visits.
+User-agent: ChatGPT-User
+Allow: /
+Disallow: /api/
+
+# Other commercial AI answer/search systems.
+User-agent: PerplexityBot
+Allow: /
+Disallow: /api/
+
+User-agent: ClaudeBot
+Allow: /
+Disallow: /api/
+
+User-agent: Claude-SearchBot
+Allow: /
+Disallow: /api/
+
+Sitemap: https://carsdetailingradom.pl/sitemap.xml

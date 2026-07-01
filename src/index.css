@@ -311,3 +311,75 @@ html { scroll-behavior: smooth; }
   }
 }
 
+
+/* =========================================================
+   Legal pages (Regulamin / Polityka prywatności / Cookies)
+   Readable long-form prose on noir. Generous spacing, hairline
+   dividers between numbered sections, hanging-indent for nested
+   lists. Anchors lead with the accent underline only on hover.
+   ========================================================= */
+.legal-prose {
+  font-size: 16px;
+  line-height: 1.72;
+  color: var(--color-noir-muted);
+}
+.legal-prose h2 {
+  font-family: var(--font-impact);
+  font-style: italic;
+  text-transform: uppercase;
+  letter-spacing: 0.01em;
+  font-size: clamp(1.5rem, 2.5vw, 2rem);
+  line-height: 1.05;
+  color: var(--color-noir-bright);
+  margin-top: 3.5rem;
+  margin-bottom: 1rem;
+  padding-top: 2rem;
+  border-top: 1px solid var(--color-hairline);
+}
+.legal-prose h2:first-of-type {
+  margin-top: 2rem;
+  padding-top: 0;
+  border-top: 0;
+}
+.legal-prose h3 {
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 1.05rem;
+  color: var(--color-noir-bright);
+  margin-top: 1.75rem;
+  margin-bottom: 0.5rem;
+}
+.legal-prose p { margin: 0 0 1rem; }
+.legal-prose ul, .legal-prose ol {
+  margin: 0 0 1.25rem;
+  padding-left: 1.5rem;
+}
+.legal-prose ul { list-style: disc; }
+.legal-prose ol { list-style: decimal; }
+.legal-prose li { margin-bottom: 0.4rem; }
+.legal-prose li > ul, .legal-prose li > ol {
+  margin-top: 0.5rem;
+  margin-bottom: 0.75rem;
+}
+.legal-prose strong { color: var(--color-noir-bright); font-weight: 600; }
+.legal-prose a {
+  color: var(--color-noir-bright);
+  text-decoration: underline;
+  text-decoration-color: var(--color-hairline-hi);
+  text-underline-offset: 3px;
+  transition: text-decoration-color 200ms var(--ease-apple);
+}
+.legal-prose a:hover {
+  text-decoration-color: var(--color-accent);
+}
+.legal-prose .legal-placeholder {
+  display: inline-block;
+  padding: 1px 6px;
+  margin: 0 2px;
+  border-radius: 3px;
+  background: rgba(184, 33, 25, 0.12);
+  border: 1px solid rgba(184, 33, 25, 0.35);
+  color: var(--color-noir-bright);
+  font-family: var(--font-mono);
+  font-size: 0.85em;
+}
