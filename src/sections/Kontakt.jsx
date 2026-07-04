@@ -41,6 +41,7 @@ export default function Kontakt() {
 
   const onSubmit = async (e) => {
     e.preventDefault()
+    const company = e.currentTarget?.company?.value || '' // honeypot
     if (!form.name.trim() || !form.phone.trim()) {
       setErrorMsg('Podaj imię i telefon — bez tego nie oddzwonimy.')
       setStatus('error')
@@ -60,6 +61,7 @@ export default function Kontakt() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           ...form,
+          company,
           interest: interestLabel,
           timing: timingLabel,
           submittedAt: new Date().toISOString(),
@@ -126,6 +128,8 @@ export default function Kontakt() {
           }} />
         ) : (
           <form onSubmit={onSubmit} className="space-y-5">
+            {/* honeypot — hidden from humans; bots that fill it get silently dropped */}
+            <input type="text" name="company" tabIndex={-1} autoComplete="off" aria-hidden="true" style={{ position: 'absolute', left: '-9999px', width: 1, height: 1, overflow: 'hidden' }} />
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <Field label="Imię" name="name" value={form.name} onChange={onChange} required autoComplete="given-name" />
               <Field

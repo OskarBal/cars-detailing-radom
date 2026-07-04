@@ -137,6 +137,7 @@ export default function WycenaForm({
 
   const onSubmit = async (e) => {
     e.preventDefault()
+    const company = e.currentTarget?.company?.value || '' // honeypot
     if (!form.name.trim() || !form.phone.trim()) {
       setErrorMsg('Podaj imię i telefon — bez tego nie oddzwonimy.')
       setStatus('error')
@@ -160,6 +161,7 @@ export default function WycenaForm({
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           ...form,
+          company,
           selectedIds,
           selectedDetails: selectedDetails.map((s) => ({
             id: s.id,
@@ -262,6 +264,8 @@ export default function WycenaForm({
           </div>
         ) : (
           <form onSubmit={onSubmit} className="px-6 md:px-8 py-6 md:py-7 space-y-6">
+            {/* honeypot — hidden from humans; bots that fill it get silently dropped */}
+            <input type="text" name="company" tabIndex={-1} autoComplete="off" aria-hidden="true" style={{ position: 'absolute', left: '-9999px', width: 1, height: 1, overflow: 'hidden' }} />
             {/* Selected services summary */}
             <SelectionSummary
               selectedDetails={selectedDetails}

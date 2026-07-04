@@ -20,6 +20,26 @@ export const config = {
   api: { bodyParser: { sizeLimit: '6mb' } },
 }
 
+// ── Anti-abuse: best-effort in-memory rate limit.
+// ponytail: per-instance only — serverless runs several instances, so this
+// blunts a single-IP flood, it is NOT a hard global cap. Upgrade to Vercel
+// Firewall / Upstash if real abuse shows up.
+const RL_HITS = new Map()
+function clientIp(req) {
+  const xff = req.headers['x-forwarded-for']
+  if (typeof xff === 'string' && xff) return xff.split(',')[0].trim()
+  return req.headers['x-real-ip'] || req.socket?.remoteAddress || 'unknown'
+}
+function rateLimited(req, limit = 10, windowMs = 600000) {
+  const ip = clientIp(req)
+  const now = Date.now()
+  const hits = (RL_HITS.get(ip) || []).filter((t) => now - t < windowMs)
+  hits.push(now)
+  RL_HITS.set(ip, hits)
+  if (RL_HITS.size > 5000) for (const [k, v] of RL_HITS) if (!v.some((t) => now - t < windowMs)) RL_HITS.delete(k)
+  return hits.length > limit
+}
+
 const MAX_NAME = 80
 const MAX_PHONE = 32
 const MAX_EMAIL = 120
@@ -199,6 +219,11 @@ export default async function handler(req, res) {
     return res.status(405).json({ error: 'Method not allowed' })
   }
 
+  if (rateLimited(req)) {
+    res.setHeader('Retry-After', '600')
+    return res.status(429).json({ error: 'Zbyt wiele prób. Odczekaj chwilę i spróbuj ponownie.' })
+  }
+
   const apiKey = process.env.RESEND_API_KEY
   const toEmail = process.env.WYCENA_TO_EMAIL
   const fromEmail = process.env.WYCENA_FROM_EMAIL
@@ -225,6 +250,11 @@ export default async function handler(req, res) {
   }
   if (!body || typeof body !== 'object') {
     return res.status(400).json({ error: 'Brak danych formularza.' })
+  }
+
+  // Honeypot — silently accept & drop bot submissions (hidden "company" field).
+  if (typeof body.company === 'string' && body.company.trim()) {
+    return res.status(200).json({ ok: true })
   }
 
   const attachments = buildAttachments(body.photos)
