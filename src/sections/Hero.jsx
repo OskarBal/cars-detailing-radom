@@ -7,12 +7,8 @@ export default function Hero() {
       aria-label="Cars Detailing Radom — premium auto detailing"
       className="relative isolate overflow-hidden bg-noir-deep min-h-svh md:h-dvh md:min-h-dvh grid grid-cols-1 grid-rows-[1fr_auto] gap-6 px-6 md:px-10 pt-24 md:pt-28 pb-7 md:pb-12"
     >
-      {/* BG image */}
-      <div
-        aria-hidden
-        className="absolute inset-0 -z-10 bg-cover bg-[position:62%_center]"
-        style={{ backgroundImage: "url('/hero-bg.webp')" }}
-      />
+      {/* BG image — responsive via .hero-bg (mobile 1280px / desktop 2400px) */}
+      <div aria-hidden className="hero-bg absolute inset-0 -z-10" />
 
       {/* Bottom fade — dissolves photo into noir-deep so the trust strip blends seamlessly */}
       <div

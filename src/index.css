@@ -383,3 +383,17 @@ html { scroll-behavior: smooth; }
   font-family: var(--font-mono);
   font-size: 0.85em;
 }
+
+/* Responsive hero background — mobile gets a 1280px variant (~53KB / 0.7MP)
+   instead of the 2400px desktop image (~170KB / 2.4MP). Browsers only fetch
+   the background whose media query matches, so mobile never downloads or
+   decodes the big one. Cuts LCP on throttled mobile. Preloads in
+   prerender.mjs are media-scoped to match. */
+.hero-bg {
+  background-image: url('/hero-bg-mobile.webp');
+  background-size: cover;
+  background-position: 62% center;
+}
+@media (min-width: 768px) {
+  .hero-bg { background-image: url('/hero-bg.webp'); }
+}

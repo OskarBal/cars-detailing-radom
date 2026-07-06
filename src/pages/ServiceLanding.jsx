@@ -10,11 +10,7 @@ export default function ServiceLanding({ slug }) {
   return (
     <article className="bg-noir-deep text-noir-bright">
       <header className="relative overflow-hidden border-b border-hairline px-6 md:px-10 pt-32 md:pt-40 pb-16 md:pb-24">
-        <div
-          aria-hidden
-          className="absolute inset-0 opacity-30"
-          style={{ backgroundImage: "url('/hero-bg.webp')", backgroundSize: 'cover', backgroundPosition: '62% center' }}
-        />
+        <div aria-hidden className="hero-bg absolute inset-0 opacity-30" />
         <div aria-hidden className="absolute inset-0 bg-gradient-to-b from-noir-deep/80 via-noir-deep/78 to-noir-deep" />
         <div className="relative mx-auto max-w-[1400px]">
           <p className="text-accent font-display font-bold text-[12px] tracking-[0.22em] uppercase mb-4">

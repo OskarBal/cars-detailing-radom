@@ -144,7 +144,11 @@ function headBlock(route) {
     `<title>${escapeHtml(route.title)}</title>`,
     `<meta name="description" content="${escapeHtml(route.description)}" />`,
     `<link rel="canonical" href="${canonical}" />`,
-    route.preloadImage ? `<link rel="preload" as="image" href="${route.preloadImage}" fetchpriority="high" />` : '',
+    // Media-scoped so mobile preloads only the 1280px variant, desktop only the 2400px.
+    // ponytail: mobile variant hardcoded — hero is the only preloaded image.
+    route.preloadImage
+      ? `<link rel="preload" as="image" href="/hero-bg-mobile.webp" media="(max-width: 767px)" fetchpriority="high" />\n    <link rel="preload" as="image" href="${route.preloadImage}" media="(min-width: 768px)" fetchpriority="high" />`
+      : '',
     `<meta property="og:type" content="website" />`,
     `<meta property="og:site_name" content="Cars Detailing Radom" />`,
     `<meta property="og:locale" content="pl_PL" />`,
