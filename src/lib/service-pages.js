@@ -26,7 +26,7 @@ export const SERVICE_PAGES = [
     faq: [
       {
         q: 'Ile kosztuje auto detailing w Radomiu?',
-        a: 'Cena zależy od zakresu prac i stanu auta. Najprostsze usługi zaczynają się od kilkudziesięciu złotych, a pełne pakiety z korektą lakieru i zabezpieczeniem są wyceniane indywidualnie.',
+        a: 'Auto detailing w Radomiu zaczyna się od kilkudziesięciu złotych za pojedyncze usługi, a najczęściej wybierane pakiety z korektą lakieru mieszczą się w przedziale 800–1500 zł — korekta One Step od 800 zł, dwuetapowa od 1500 zł. Powłoki ceramiczne i folie PPF wyceniamy indywidualnie, zwykle w 15 minut po obejrzeniu auta. Klientom z Radomia odbieramy i odwozimy samochód pod dom (door-to-door).',
       },
       {
         q: 'Czy można zamówić odbiór auta?',
@@ -70,7 +70,7 @@ export const SERVICE_PAGES = [
       },
       {
         q: 'Jak długo utrzymuje się ceramika?',
-        a: 'Zależnie od wybranego produktu, pielęgnacji i eksploatacji auta. W cenniku dostępne są zabezpieczenia roczne, 3-letnie i 5-letnie.',
+        a: 'Od roku do pięciu lat, zależnie od wybranej powłoki i pielęgnacji. W ofercie mamy zabezpieczenia roczne, 3-letnie i 5-letnie — trwałość podnosi regularne, delikatne mycie i unikanie myjni szczotkowych.',
       },
     ],
     related: [
@@ -106,7 +106,7 @@ export const SERVICE_PAGES = [
     faq: [
       {
         q: 'Czym różni się One Step od korekty dwuetapowej?',
-        a: 'One Step szybko odświeża lakier i usuwa część defektów. Korekta dwuetapowa pozwala mocniej ciąć rysy, a potem wykończyć lakier na wysoki połysk.',
+        a: 'One Step (od 800 zł) szybko odświeża lakier i usuwa część defektów. Korekta dwuetapowa (od 1500 zł) mocniej tnie rysy i wykańcza lakier na wysoki połysk — wybieramy ją przy głębszych zarysowaniach oraz pod powłokę ceramiczną.',
       },
       {
         q: 'Czy po korekcie trzeba zabezpieczyć lakier?',
@@ -146,11 +146,11 @@ export const SERVICE_PAGES = [
     faq: [
       {
         q: 'Ile trwa pranie tapicerki samochodowej?',
-        a: 'Czas zależy od zakresu i zabrudzenia. Samo pranie foteli jest krótsze, pełne czyszczenie wnętrza wymaga więcej czasu oraz dosuszenia.',
+        a: 'O długości usługi decyduje dosuszenie, a nie samo pranie. Pranie pojedynczych foteli jest szybkie, natomiast pełne czyszczenie wnętrza planujemy tak, aby tapicerka zdążyła wyschnąć przed odbiorem auta. Dokładny czas potwierdzamy przy przyjęciu, po obejrzeniu wnętrza.',
       },
       {
         q: 'Czy da się usunąć zapach z auta?',
-        a: 'Często tak, ale najpierw trzeba usunąć źródło zapachu. Ozonowanie i neutralizacja mają sens po dokładnym czyszczeniu wnętrza.',
+        a: 'Tak, jeśli najpierw usuniemy źródło zapachu. Ozonowanie i neutralizacja działają dopiero po dokładnym praniu wnętrza — samo ozonowanie zabrudzonej tapicerki maskuje problem tylko na chwilę.',
       },
     ],
     related: [
